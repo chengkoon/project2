@@ -1,0 +1,30 @@
+this is the edit request page
+
+<div class="container">
+  <form action="/voiddeck/requests/create" method="POST">
+
+    <div class="modal-body row">
+      <div class="form-group col-md-6">
+        <label for="foodItem">Help me buy:</label>
+        <input type="text" class="form-control" id="foodItemInput" value="<%= requestItem.foodItem %>" name="foodItem">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="foodShop">From:</label>
+        <input class="form-control" id="foodShopInput" value="<%= requestItem.foodShop %>" name="foodShop">
+      </div>
+    </div>
+
+    <div class="modal-body row">
+      <div class="form-group col-md-6">
+        <label for="destination">Deliver to:</label>
+        <input type="text" class="form-control" id="destinationInput" value="<%= requestItem.destination %>" name="destination">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="latestBy">Latest by this time:</label>
+        <input class="form-control" id="latestByInput" value="<%= requestItem.latestBy %>" name="latestBy">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>

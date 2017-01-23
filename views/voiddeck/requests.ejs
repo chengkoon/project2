@@ -1,0 +1,38 @@
+<div class="container">
+  <h1 class="page-header">List of Requests Posted</h1>
+
+<!-- <ul class="list-group">
+  <% requests.forEach(function (todoItem) { %>
+    <li class="list-group-item">
+      <strong><%= todoItem.title %>: </strong>
+      <%= todoItem.description %>
+      || Completed:
+      <% if (todoItem.completed == true) { %>
+        <span class="label label-success">True</span>
+      <% } else if (todoItem.completed == false) { %>
+        <span class="label label-danger">False</span>
+      <% } %>
+      <a class="pull-right" href=<%= "/todo/" + todoItem._id %>>View</a>
+    </li>
+  <% }) %>
+</ul> -->
+
+  <ul class="list-group">
+    <% requests.forEach(function (requestItem) { %>
+      <a href="/voiddeck/requests/<%= requestItem._id %>">
+      <li class="list-group-item">
+        Pls help me buy: <strong><%= requestItem.foodItem %></strong><br>
+        from: <strong><%= requestItem.foodShop %></strong><br>
+        and deliver it to: <strong><%= requestItem.destination %></strong><br>
+        I need to satisfy my hunger by: <strong><%= requestItem.latestBy %></strong><br>
+      </li>
+    </a>
+    <% }) %>
+  </ul>
+
+Can't find an offer near you?...<br>
+
+<a href="/voiddeck/requests/create">Create one!</a>
+
+
+</div>

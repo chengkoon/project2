@@ -1,0 +1,33 @@
+
+<div>create request page</div>
+
+<br>
+
+<div class="container">
+  <form action="/voiddeck/requests/create" method="POST">
+
+    <div class="modal-body row">
+      <div class="form-group col-md-6">
+        <label for="foodItem">Help me buy:</label>
+        <input type="text" class="form-control" id="foodItemInput" placeholder="curry puff" name="foodItem">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="foodShop">From:</label>
+        <input class="form-control" id="foodShopInput" placeholder="Old Chang Kee" name="foodShop">
+      </div>
+    </div>
+
+    <div class="modal-body row">
+      <div class="form-group col-md-6">
+        <label for="destination">Deliver to:</label>
+        <input type="text" class="form-control" id="destinationInput" placeholder="Cinnamon College lift lobby" name="destination">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="latestBy">Latest by this time:</label>
+        <input class="form-control" id="latestByInput" placeholder="9pm (change this to dropdown)" name="latestBy">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>
