@@ -39,7 +39,7 @@ let voiddeckController = {
     })
   },
 
-  updateOrCommitTest: (req,res) => {
+  updateOrCommit: (req,res) => {
     console.log("Hi, ", req.user);
     console.log("current session user id is: ", req.user._id);
     console.log("can i get the params? ", req.params);
@@ -69,9 +69,25 @@ let voiddeckController = {
     Request.findById(req.params.id, (err, requestItem) => {
       if (err) throw err
       else {
-        console.log(requestItem);
+        console.log("we are here: ", requestItem);
         res.render('voiddeck/editRequest', { requestItem: requestItem})
+        //fill the form with values from requestItem in the editRequest form
       }
+    })
+  },
+
+  makeEdit: (req,res) => {
+    // console.log("req.params is: ", req.params);
+    Request.findOneAndUpdate({
+      _id: req.params.id
+    }, {
+      foodItem: req.body.foodItem,
+      foodShop: req.body.foodShop,
+      destination: req.body.destination,
+      latestBy: req.body.latestBy
+    }, (err, requestItem) => {
+      if (err) throw err
+      res.redirect('/voiddeck/requests/view');
     })
   }
 

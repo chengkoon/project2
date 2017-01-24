@@ -32,6 +32,7 @@ app.use(flash());
 // set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('morgan')('dev'));
+app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(ejsLayouts);
 

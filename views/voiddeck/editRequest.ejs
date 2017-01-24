@@ -1,7 +1,7 @@
 this is the edit request page
 
 <div class="container">
-  <form action="/voiddeck/requests/create" method="POST">
+  <form action=<%= "/voiddeck/requests/" + requestItem._id + "?_method=PUT" %> method="POST">
 
     <div class="modal-body row">
       <div class="form-group col-md-6">

@@ -18,9 +18,10 @@ router.get('/voiddeck', voiddeckController.index);
 router.get('/voiddeck/requests/view', voiddeckController.listRequests);
 router.get('/voiddeck/requests/create', isLoggedIn, voiddeckController.createRequestPage);
 router.post('/voiddeck/requests/create', isLoggedIn, voiddeckController.createRequest);
-router.get('/voiddeck/requests/:id', isLoggedIn, voiddeckController.updateOrCommitTest);
+router.get('/voiddeck/requests/:id', isLoggedIn, voiddeckController.updateOrCommit);
 // router.put('/voiddeck/requests/:id', isLoggedIn, voiddeckController.updateOrCommitTest);
 router.get('/voiddeck/requests/:id/edit', isLoggedIn, voiddeckController.editPage);
+router.put('/voiddeck/requests/:id', isLoggedIn, voiddeckController.makeEdit);
 
 router.get('/profile', isLoggedIn, function (req, res) {
   Todo.find({author: req.user._id}, function (err, todos) {
