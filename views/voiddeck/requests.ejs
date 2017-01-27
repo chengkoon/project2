@@ -50,7 +50,7 @@
         <span style="float:right;">
           <% if (oneRequest.helper) { %>
             <form action=<%= "/voiddeck/party/confirm/" + oneRequest._id + "?_method=PUT" %> method="POST">
-              <% if (currentUser.confirmedDelivery) { %>
+              <% if (currentUser.confirmedDelivery && oneRequest.helper) { %>
                 <button type="submit" class="btn btn-danger disabled">
                   <% if (currentUser.foodItem) { %>
                     Received
@@ -60,7 +60,7 @@
                   <% } %>
                 </button>
               <% } %>
-              <% if (!currentUser.confirmedDelivery) { %>
+              <% if (!currentUser.confirmedDelivery && oneRequest.helper) { %>
                 <button type="submit" class="btn btn-danger">
                   <% if (currentUser.foodItem) { %>
                     Received
