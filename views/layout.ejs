@@ -14,8 +14,10 @@
         <nav>
           <ul class="nav nav-pills pull-right">
           <% if (currentUser) { %>
+            <!-- <li role="presentation"><a href="/voiddeck/requests/create">I'm hungry!</a></li> -->
+            <li role="presentation"><a href="/voiddeck/requests/view">All Food Parties</a></li>
             <li role="presentation"><a href="/profile">Profile</a></li>
-            <li role="presentation"><a href="/auth/logout">Sign out</a></li>
+            <li role="presentation"><a href="/logout">Sign out</a></li>
           <% }; %>
           <% if (!currentUser) { %>
             <li role="presentation"><a href="/register">Register</a></li>
@@ -23,11 +25,17 @@
           <% }; %>
           </ul>
         </nav>
-        <h3 class="text-muted"><a href="/voiddeck/requests/view">Void Deck</a></h3>
+        <h3 class="text-muted"><a href="/voiddeck/requests/view">Tapau</a></h3>
       </div>
 
+      <% if (currentUser) { %>
+        <h5>Hi <%= currentUser.name %></h5>
+      <% }; %>
+
       <div class="row">
+
         <div class="col-lg-12">
+          
           <%- body %>
           <!-- <%- JSON.stringify(currentUser) %> -->
 

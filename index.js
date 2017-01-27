@@ -7,12 +7,14 @@ var flash = require('connect-flash');
 var passport = require('./config/ppConfig');
 const ejsLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
-const todo = require('./routes/todo_router');
+
 const allRoutes = require('./routes/allRoutes');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const isLoggedIn = require('./middleware/isLoggedIn');
-const Todo = require('./models/todo');
+
+const Request = require('./models/request');
+
 var app = express();
 
 mongoose.connect('mongodb://localhost/myapp3');

@@ -1,0 +1,52 @@
+You are agreeing to help these people deliver
+<br><br>
+<center><strong><%= requestItem.food %></strong> to <strong><%= requestItem.destination %></strong></center>
+
+<div class="container">
+  <form action=<%= "/voiddeck/help/" + requestItem._id + "?_method=PUT" %> method="POST">
+
+
+    <br>The collection time range of the members is from:
+
+    <br><br>
+    <center><%= requestItem.collectionStartDate %><strong> <%= requestItem.collectionStartTime %> </strong>
+    to <%= requestItem.collectionEndDate %><strong> <%= requestItem.collectionEndTime %></strong></center>
+
+    <br>
+    You can <strong>choose</strong> to narrow down the time range for <strong>delivery time:</strong>
+    <br>
+    <h6>(aka your estimated time of arrival at the destination)</h6>
+
+
+      <div class="modal-body row">
+        <div class="form-group col-md-4">
+          <label for="collectionStartDate">From (Day):</label>
+          <input class="form-control" type="date" value="<%= requestItem.collectionStartDate %>" id="deliveryStartDate" name="deliveryStartDate">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="collectionStartTime">From (Time):</label>
+          <input class="form-control" type="time" id="collectionStartTime" value="<%= requestItem.collectionStartTime %>" name="deliveryStartTime">
+        </div>
+      </div>
+
+    <div class="modal-body row">
+      <div class="form-group col-md-4">
+        <label for="collectionEndDate">To (Day):</label>
+        <input class="form-control" type="date" value="2017-01-25" id="collectionEndDate" value="<%= requestItem.collectionEndDate %>" name="deliveryEndDate">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="collectionEndTime">To (Time):</label>
+        <input class="form-control" type="time" id="collectionEndTime" value="<%= requestItem.collectionEndTime %>" name="deliveryEndTime">
+      </div>
+    </div>
+
+    <center><button type="submit" class="btn btn-default">Submit</button></center>
+    <br>
+
+
+
+
+  </form>
+
+
+</div>

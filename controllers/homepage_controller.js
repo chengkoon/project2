@@ -1,10 +1,15 @@
 let User = require('../models/user');
 let passport = require('../config/ppConfig');
+let Request = require('../models/request')
 
 let homepageController = {
-  
+
   index: (req,res) => {
-    res.render('index');
+    res.render('homepage/index');
+    // Request.find({}, (err, requests) => {
+    //   if (err) throw err
+    //   res.render('index', { requests: requests })
+    // })
   },
 
   registrationPage: (req,res) => {
@@ -38,7 +43,7 @@ let homepageController = {
 
   login:
     passport.authenticate('local', {
-      successRedirect: '/',
+      successRedirect: '/voiddeck/requests/view',
       failureRedirect: '/login',
       failureFlash: 'Invalid username and/or password',
       successFlash: 'You have logged in'

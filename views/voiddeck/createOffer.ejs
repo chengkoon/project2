@@ -1,0 +1,33 @@
+
+<h3>Help deliver food to others:</h3>
+<a href="/voiddeck/requests/create">or if you're feeling hungry and lazy yourself..</a>
+<br>
+
+<div class="container">
+  <form action="/voiddeck/offers/create" method="POST">
+
+    <div class="modal-body row">
+      <div class="form-group col-md-6">
+        <label for="foodItem">Accepting orders from shops at </label>
+        <input type="text" class="form-control" id="shoppingMall" placeholder="Star Vista" name="shoppingMall">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="helperDestination">I'll be delivering to </label>
+        <input class="form-control" id="helperDestination" placeholder="Tembusu College" name="helperDestination">
+      </div>
+    </div>
+
+    <div class="modal-body row">
+      <div class="form-group col-md-6">
+        <label for="helperEarliestTime">From estimated time of </label>
+        <input type="text" class="form-control" id="helperEarliestTime" placeholder="8pm" name="helperEarliestTime">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="helperLatestBy">To latest </label>
+        <input class="form-control" id="helperLatestBy" placeholder="9pm (change this to dropdown)" name="helperLatestBy">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>

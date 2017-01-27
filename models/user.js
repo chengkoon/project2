@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcryptjs');
+var Request = require('../models/request');
 
 var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
@@ -21,7 +22,12 @@ var UserSchema = new mongoose.Schema({
     required: true ,
     minlength: [8, 'Password must be between 8 and 99 characters'],
     maxlength: [99, 'Password must be between 8 and 99 characters'],
-  }
+  },
+  foodItem: { type: String, default: null },
+  helper: { type: Boolean, default: false },
+  party: { type: mongoose.Schema.Types.ObjectId, ref: 'Request', default: null },
+  confirmedDelivery: { type: Boolean, default: false }
+
 });
 
 UserSchema.pre('save', function(next) {
