@@ -17,7 +17,7 @@ const Request = require('./models/request');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/myapp3');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/myapp3'); //heroku
 mongoose.Promise = global.Promise;
 
 app.set('view engine', 'ejs');
