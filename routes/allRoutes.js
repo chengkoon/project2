@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const isLoggedIn = require('../middleware/isLoggedIn');
-const Todo = require('../models/todo');
+
 const homepageController = require('../controllers/homepage_controller')
 const voiddeckController = require('../controllers/voiddeck_controller')
 

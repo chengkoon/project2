@@ -6,7 +6,7 @@ const RequestSchema = new mongoose.Schema({
 
   author: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 
-  foodShop: String,
+
   destination: String,
 
   collectionStartDate: { type: String, default: null },

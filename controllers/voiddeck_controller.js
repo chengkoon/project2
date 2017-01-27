@@ -157,24 +157,61 @@ let voiddeckController = {
 
   makeEdit: (req,res) => {
     // console.log("req.params is: ", req.params);
-    Request.findOneAndUpdate({
-      _id: req.params.id
-    }, {
-      foodItem: req.body.foodItem,
-      foodShop: req.body.foodShop,
-      destination: req.body.destination,
-      latestBy: req.body.latestBy,
 
-      collectionStartDate: req.body.collectionStartDate,
-      collectionEndDate: req.body.collectionEndDate,
-      collectionStartTime: req.body.collectionStartTime,
-      collectionEndTime: req.body.collectionEndTime,
-      collectionStartUTC: millisecondConverter(req.body.collectionStartDate, req.body.collectionStartTime),
-      collectionEndUTC: millisecondConverter(req.body.collectionEndDate, req.body.collectionEndTime)
-    }, (err, requestItem) => {
+    Request.findOne({
+      _id: req.params.id
+    }, (err, thisRequest) => {
       if (err) throw err
-      res.redirect('/voiddeck/requests/view');
+      else if ((thisRequest.members.length > 1) || (thisRequest.helper.length === 1)) {
+        // let the member edit the food ONLY if there's already more than 1 member
+        let thisIndex = thisRequest.members.indexOf(req.user.name);
+        thisRequest.food.splice(thisIndex,1);
+        thisRequest.food.push(req.body.foodItem);
+        thisRequest.save();
+        req.user.foodItem = req.body.foodItem;
+        req.user.save();
+        res.redirect('/voiddeck/requests/view');
+      }
+      else if (thisRequest.members.length === 0) {
+        Request.findOneAndUpdate({
+          _id: req.params.id
+        }, {
+          foodItem: req.body.foodItem,
+
+          destination: req.body.destination,
+          latestBy: req.body.latestBy,
+
+          collectionStartDate: req.body.collectionStartDate,
+          collectionEndDate: req.body.collectionEndDate,
+          collectionStartTime: req.body.collectionStartTime,
+          collectionEndTime: req.body.collectionEndTime,
+          collectionStartUTC: millisecondConverter(req.body.collectionStartDate, req.body.collectionStartTime),
+          collectionEndUTC: millisecondConverter(req.body.collectionEndDate, req.body.collectionEndTime)
+        }, (err, requestItem) => {
+          if (err) throw err
+          res.redirect('/voiddeck/requests/view');
+        })
+      }
     })
+
+    // Request.findOneAndUpdate({
+    //   _id: req.params.id
+    // }, {
+    //   foodItem: req.body.foodItem,
+    //
+    //   destination: req.body.destination,
+    //   latestBy: req.body.latestBy,
+    //
+    //   collectionStartDate: req.body.collectionStartDate,
+    //   collectionEndDate: req.body.collectionEndDate,
+    //   collectionStartTime: req.body.collectionStartTime,
+    //   collectionEndTime: req.body.collectionEndTime,
+    //   collectionStartUTC: millisecondConverter(req.body.collectionStartDate, req.body.collectionStartTime),
+    //   collectionEndUTC: millisecondConverter(req.body.collectionEndDate, req.body.collectionEndTime)
+    // }, (err, requestItem) => {
+    //   if (err) throw err
+    //   res.redirect('/voiddeck/requests/view');
+    // })
   },
 
   joinPage: (req,res) => {
@@ -298,7 +335,9 @@ let voiddeckController = {
       if (err) throw err
 
       else if (thisRequest.numberOfConfirmedDelivery === thisRequest.members.length+1) {
-        //delete the whole party
+        // ^ when EVERYONE (helper + members) has confirmed 'delivered' and 'received'
+        console.log("last person has clicked on button");
+        res.redirect('/voiddeck');
       }
       else { //individual confirmations
         req.user.confirmedDelivery = true;
@@ -334,7 +373,6 @@ let voiddeckController = {
         }
         else {
           let thisIndex = requestToBeDeleted.members.indexOf(req.user.name);
-          console.log("CHECK IF thisIndex works...it is...", thisIndex);
           requestToBeDeleted.members.splice(thisIndex,1);
           requestToBeDeleted.food.splice(thisIndex,1);
           requestToBeDeleted.author.splice(thisIndex,1);
@@ -384,11 +422,5 @@ let voiddeckController = {
       res.redirect('/voiddeck')
     })
   }
-
-
-
 }
-
-
-
 module.exports = voiddeckController

@@ -10,25 +10,25 @@
     <li class="list-group-item">
 
       <p style="text-align:left;">
-        <% if (oneRequest.helper) { %>
+        <% if (oneRequest.helper.length === 1) { %>
           Leader: <%= oneRequest.helper[0] %>
         <% } %>
-        <% if (!oneRequest.helper) { %>
+        <% if (oneRequest.helper.length === 0) { %>
           Leader: --
         <% } %>
       <span style="float:right;">
         Members:
         <% for (var i=0; i<3; i++) { %>
-          <% if ((oneRequest.members[i] == currentUser.name) && (!oneRequest.helper)) { %>
+          <% if ((oneRequest.members[i] == currentUser.name) && (oneRequest.helper.length === 0)) { %>
             <a href="/voiddeck/requests/<%= oneRequest._id %>"><%= oneRequest.members[i] %></a>
           <% } %>
-          <% if ((oneRequest.members[i] == currentUser.name) && (oneRequest.helper)) { %>
+          <% if ((oneRequest.members[i] == currentUser.name) && (oneRequest.helper.length === 1)) { %>
             <%= oneRequest.members[i] %>
           <% } %>
-          <% if (!oneRequest.members[i] && !oneRequest.helper) { %>
+          <% if (!oneRequest.members[i] && oneRequest.helper.length === 0) { %>
             waiting...
           <% } %>
-          <% if (!oneRequest.members[i] && oneRequest.helper) { %>
+          <% if (!oneRequest.members[i] && oneRequest.helper.length === 1) { %>
             closed...
           <% } %>
           <% if (oneRequest.members[i] !== currentUser.name) { %>
