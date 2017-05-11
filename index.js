@@ -15,7 +15,13 @@ const Request = require('./models/request');
 
 var app = express();
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/myapp3'); //heroku
+// connect to MongoDB based on environment
+if (process.env.NODE_ENV === 'test') {
+  mongoose.connect('mongodb://localhost/myapp3-test')
+  console.log('CONNECTING TO TEST SERVER...');
+} else {
+  mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/myapp3'); //heroku
+}
 mongoose.Promise = global.Promise;
 
 app.set('view engine', 'ejs');
@@ -29,6 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(flash());
+
 // set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('morgan')('dev'));
@@ -47,3 +54,5 @@ app.use('/', allRoutes);
 
 // app.listen(3000)
 app.listen(process.env.PORT || 3000)
+
+// let tests use this file

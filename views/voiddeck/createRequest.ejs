@@ -3,6 +3,8 @@
 
 <br>
 
+
+
 <div class="container">
   <form action="/voiddeck/requests/create" method="POST">
 
@@ -25,23 +27,39 @@
 
     <div class="modal-body row">
       <div class="form-group col-md-4">
-        <label for="collectionStartDate">From (Day):</label>
-        <input class="form-control" type="date" value="2017-01-27" id="collectionStartDate" name="collectionStartDate">
+        <label for="collectionStartDate">From (Date):</label>
+        <input class="form-control" type="date" value="2017-05-11" id="collectionStartDate" name="collectionStartDate">
       </div>
-      <div class="form-group col-md-4">
+      <!-- <div class="form-group col-md-4">
         <label for="collectionStartTime">From (Time):</label>
         <input class="form-control" type="time" id="collectionStartTime" name="collectionStartTime">
+      </div> -->
+      <div class="form-group col-md-2">
+        <label for="collectionStartHour">From (Hour):</label>
+        <input class="form-control" type="number" min="0" max="23" id="collectionStartHour" name="collectionStartHour">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="collectionStartMin">From (Min):</label>
+        <input class="form-control" type="number" min="0" max="59" id="collectionStartMin" name="collectionStartMin">
       </div>
     </div>
 
     <div class="modal-body row">
       <div class="form-group col-md-4">
-        <label for="collectionEndDate">To (Day):</label>
-        <input class="form-control" type="date" value="2017-01-27" id="collectionEndDate" name="collectionEndDate">
+        <label for="collectionEndDate">To (Date):</label>
+        <input class="form-control" type="date" value="2017-05-11" id="collectionEndDate" name="collectionEndDate">
       </div>
-      <div class="form-group col-md-4">
+      <!-- <div class="form-group col-md-4">
         <label for="collectionEndTime">To (Time):</label>
         <input class="form-control" type="time" id="collectionEndTime" name="collectionEndTime">
+      </div> -->
+      <div class="form-group col-md-2">
+        <label for="collectionEndHour">To (Hour):</label>
+        <input class="form-control" type="number" min="0" max="23" id="collectionEndHour" name="collectionEndHour">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="collectionEndMin">To (Min):</label>
+        <input class="form-control" type="number" min="0" max="59" id="collectionEndMin" name="collectionEndMin">
       </div>
     </div>
 

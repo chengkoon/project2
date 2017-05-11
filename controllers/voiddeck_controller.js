@@ -1,10 +1,12 @@
 let Request = require('../models/request')
 let User = require('../models/user')
 
-var millisecondConverter = function(date,time) {
+var millisecondConverter = function(date,hour,min) {
   let dateMS = date.split('-');
-  let timeMS = time.split(':');
-  let finalMS = new Date(dateMS[0],dateMS[1]-1,dateMS[2],timeMS[0],timeMS[1]);
+  // let timeMS = time.split(':');
+  hour = parseInt(hour);
+  min = parseInt(min);
+  let finalMS = new Date(dateMS[0],dateMS[1]-1,dateMS[2],hour,min);
   return finalMS.getTime();
 }
 
@@ -19,14 +21,14 @@ let voiddeckController = {
     Request.find({}, (err, requests) => {
       if (err) throw err
       else {
-        console.log("req.user is ",req.user);
-        console.log("requests is ",requests);
+        // console.log("req.user is ",req.user);
+        // console.log("requests is ",requests);
         Request.findOne({
           author: req.user._id
         }, (err, oneRequest) => {
           if (err) throw err
           else {
-            console.log("onerequest is ", oneRequest);
+            // console.log("onerequest is ", oneRequest);
             res.render('voiddeck/requests', { requests: requests, oneRequest: oneRequest, currentUser: req.user})
           }
         })
@@ -35,23 +37,99 @@ let voiddeckController = {
   },
 
   createRequestPage: (req,res) => {
+    if (req.user.party) { //meaning user is alr in a party
+      req.flash('error', 'You are already in a party! Leave/delete your party before creating a new one');
+      res.redirect('/voiddeck');
+    }
     res.render('voiddeck/createRequest')
   },
 
   createRequest: (req,res) => {
 
+    if (req.user.party) { //meaning user is alr in a party
+      req.flash('error', 'You are already in a party! (Leave/delete your party before helping others)');
+      res.redirect('/voiddeck');
+    }
+
+    let collectionStartUTC = millisecondConverter(req.body.collectionStartDate, req.body.collectionStartHour, req.body.collectionStartMin);
+    let collectionEndUTC = millisecondConverter(req.body.collectionEndDate, req.body.collectionEndHour, req.body.collectionEndMin);
+    let dateNowUTC = Date.now();
+
     let newRequest = new Request({
 
       author: req.user,
       destination: req.body.destination,
+      requestCreatedUTC: dateNowUTC,
 
       collectionStartDate: req.body.collectionStartDate,
       collectionEndDate: req.body.collectionEndDate,
-      collectionStartTime: req.body.collectionStartTime,
-      collectionEndTime: req.body.collectionEndTime,
-      collectionStartUTC: millisecondConverter(req.body.collectionStartDate, req.body.collectionStartTime),
-      collectionEndUTC: millisecondConverter(req.body.collectionEndDate, req.body.collectionEndTime)
+      // collectionStartTime: req.body.collectionStartTime,
+      // collectionEndTime: req.body.collectionEndTime,
+      collectionStartHour: req.body.collectionStartHour,
+      collectionStartMin: req.body.collectionStartHour,
+      collectionEndHour: req.body.collectionEndHour,
+      collectionEndMin: req.body.collectionEndMin,
+      collectionStartUTC: collectionStartUTC,
+      collectionEndUTC: collectionEndUTC
     })
+
+
+    // Request.create({
+    //
+    //   author: req.user,
+    //   destination: req.body.destination,
+    //
+    //   collectionStartDate: req.body.collectionStartDate,
+    //   collectionEndDate: req.body.collectionEndDate,
+    //   // collectionStartTime: req.body.collectionStartTime,
+    //   // collectionEndTime: req.body.collectionEndTime,
+    //   collectionStartHour: req.body.collectionStartHour,
+    //   collectionStartMin: req.body.collectionStartHour,
+    //   collectionEndHour: req.body.collectionEndHour,
+    //   collectionEndMin: req.body.collectionEndMin,
+    //   collectionStartUTC: collectionStartUTC,
+    //   collectionEndUTC: collectionEndUTC
+    //
+    // }, (err, newRequest) => {
+    //   if (err) {
+    //     // FLASH
+    //     delete newRequest;
+    //     req.flash('error', 'Could not create your delivery request');
+    //     res.redirect('/voiddeck/requests/create');
+    //   }
+    //   else if (collectionStartUTC >= collectionEndUTC) {
+    //     delete newRequest;
+    //     req.flash('error', 'Collection time range error: Your collection start time should be earlier than the end time.');
+    //     res.redirect('/voiddeck/requests/create');
+    //   }
+    //   else if ((collectionStartUTC < dateNowUTC) || (collectionEndUTC <= dateNowUTC)) {
+    //     delete newRequest;
+    //     req.flash('error', 'Collection time range error: Your collection time range should be later than the current time.');
+    //     res.redirect('/voiddeck/requests/create');
+    //   }
+    //   else {
+    //     newRequest.members.push(req.user.name);
+    //     newRequest.food.push(req.body.foodItem);
+    //     newRequest.save((err, savedRequest) => {
+    //       if (err) throw err
+    //       else {
+    //         User.findOneAndUpdate({
+    //           _id: req.user._id
+    //         }, {
+    //           foodItem: req.body.foodItem,
+    //           party: newRequest._id
+    //         }, (err, thing) => {
+    //           if (err) throw err
+    //           else {
+    //             req.flash('success', 'Request for delivery creted successfully.');
+    //             res.redirect('/voiddeck')
+    //           }
+    //         })
+    //       }
+    //     })
+    //   }
+    // });
+
     newRequest.members.push(req.user.name);
     newRequest.food.push(req.body.foodItem);
 
@@ -62,7 +140,13 @@ let voiddeckController = {
     // req.user.save();
 
     newRequest.save(function (err, savedEntry) {
-      if (err) throw err
+      if (err) {
+
+        req.flash('error', 'Please enter a valid time range for collection time.');
+        res.redirect('/voiddeck');
+      }
+
+
       else {
         User.findOneAndUpdate({
           _id: req.user._id
@@ -72,6 +156,10 @@ let voiddeckController = {
         }, (err, thing) => {
           if (err) throw err
           else {
+            console.log("savedEntry is...", savedEntry);
+            console.log("savedEntry.collectionStartUTC is...", savedEntry.collectionStartUTC);
+            console.log("collectionStartUTC is...", collectionStartUTC);
+            console.log("hehehehehe");
             res.redirect('/voiddeck')
           }
         })
@@ -263,12 +351,12 @@ let voiddeckController = {
   },
 
   help: (req,res) => {
-    if (req.user.foodItem) { //meaning user is alr in a party
+    if (req.user.party) { //meaning user is alr in a party
       req.flash('error', 'You are already in a party! (Leave/delete your party before helping others)');
       res.redirect('/voiddeck');
     }
     else if (req.user.helper) {
-      req.flash('error', 'You are already a helper! (Complete that quest first)');
+      req.flash('error', 'You are already a helper for another party! (Complete that quest first)');
       res.redirect('/voiddeck');
     }
     else {

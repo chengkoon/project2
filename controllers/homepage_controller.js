@@ -17,6 +17,7 @@ let homepageController = {
   },
 
   register: (req,res) => {
+    console.log('CLIENT: received', req.body);
     User.create({
       email: req.body.email,
       name: req.body.name,
