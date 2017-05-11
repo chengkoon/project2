@@ -4,7 +4,7 @@
   "description": "todo list app with login authentication",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test mocha",
     "start": "node index.js"
   },
   "author": "chengkoon",
@@ -12,6 +12,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.0",
     "body-parser": "^1.15.2",
+    "chai": "^3.5.0",
     "connect-flash": "^0.1.1",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.5",
@@ -23,6 +24,8 @@
     "morgan": "^1.7.0",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "superagent": "^3.5.0",
+    "supertest": "^3.0.0"
   }
 }
