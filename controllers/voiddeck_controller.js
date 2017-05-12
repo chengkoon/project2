@@ -45,7 +45,7 @@ let voiddeckController = {
   },
 
   createRequest: (req,res) => {
-
+    console.log("HELLO we just posted createRequest");
     if (req.user.party) { //meaning user is alr in a party
       req.flash('error', 'You are already in a party! (Leave/delete your party before helping others)');
       res.redirect('/voiddeck');
@@ -54,6 +54,8 @@ let voiddeckController = {
     let collectionStartUTC = millisecondConverter(req.body.collectionStartDate, req.body.collectionStartHour, req.body.collectionStartMin);
     let collectionEndUTC = millisecondConverter(req.body.collectionEndDate, req.body.collectionEndHour, req.body.collectionEndMin);
     let dateNowUTC = Date.now();
+
+    console.log("c.start, end, and dateNowUTC are...", collectionStartUTC, collectionEndUTC, dateNowUTC);
 
     let newRequest = new Request({
 
@@ -66,7 +68,7 @@ let voiddeckController = {
       // collectionStartTime: req.body.collectionStartTime,
       // collectionEndTime: req.body.collectionEndTime,
       collectionStartHour: req.body.collectionStartHour,
-      collectionStartMin: req.body.collectionStartHour,
+      collectionStartMin: req.body.collectionStartMin,
       collectionEndHour: req.body.collectionEndHour,
       collectionEndMin: req.body.collectionEndMin,
       collectionStartUTC: collectionStartUTC,
@@ -372,15 +374,20 @@ let voiddeckController = {
       if (err) throw err
       else {
         console.log("This is requestItem", requestItem);
-        res.render('voiddeck/helpDeliver', {requestItem:requestItem});
+        res.render('voiddeck/helpDeliver', {requestItem: requestItem});
       }
     })
   },
 
   makeHelp: (req,res) => {
-    let deliveryStartUTC = millisecondConverter(req.body.deliveryStartDate, req.body.deliveryStartTime);
-    let deliveryEndUTC = millisecondConverter(req.body.deliveryEndDate, req.body.deliveryEndTime);
-    console.log("we are in the makeHelp page");
+
+    let deliveryStartUTC = millisecondConverter(req.body.deliveryStartDate, req.body.deliveryStartHour, req.body.deliveryStartMin);
+    let deliveryEndUTC = millisecondConverter(req.body.deliveryEndDate, req.body.deliveryEndHour, req.body.deliveryEndMin);
+    let dateNowUTC = Date.now();
+
+    // let deliveryStartUTC = millisecondConverter(req.body.deliveryStartDate, req.body.deliveryStartTime);
+    // let deliveryEndUTC = millisecondConverter(req.body.deliveryEndDate, req.body.deliveryEndTime);
+
     Request.findOne({
       _id: req.params.id
     }, (err, requestToBeChecked) => {

@@ -9,34 +9,42 @@ You are agreeing to help these people deliver
     <br>The collection time range of the members is from:
 
     <br><br>
-    <center><%= requestItem.collectionStartDate %><strong> <%= requestItem.collectionStartTime %> </strong>
-    to <%= requestItem.collectionEndDate %><strong> <%= requestItem.collectionEndTime %></strong></center>
+    <center>
+      <%= requestItem.collectionStartDate %><strong> <%= requestItem.collectionStartHour %></strong>:<strong><%= requestItem.collectionStartMin %> </strong>
+      to <%= requestItem.collectionEndDate %><strong> <%= requestItem.collectionEndHour %></strong>:<strong><%= requestItem.collectionEndMin %> </strong>
+    </center>
 
     <br>
-    You can <strong>choose</strong> to narrow down the time range for <strong>delivery time:</strong>
+    Please state the delivery time range convenient for you. It has to be <strong>equal</strong> or <strong>within</strong> the current collection time range.
     <br>
-    <h6>(aka your estimated time of arrival at the destination)</h6>
-
 
       <div class="modal-body row">
         <div class="form-group col-md-4">
-          <label for="collectionStartDate">From (Day):</label>
+          <label for="deliveryStartDate">From (Day):</label>
           <input class="form-control" type="date" value="<%= requestItem.collectionStartDate %>" id="deliveryStartDate" name="deliveryStartDate">
         </div>
-        <div class="form-group col-md-4">
-          <label for="collectionStartTime">From (Time):</label>
-          <input class="form-control" type="time" id="collectionStartTime" value="<%= requestItem.collectionStartTime %>" name="deliveryStartTime">
+        <div class="form-group col-md-2">
+          <label for="deliveryStartHour">From (Hour):</label>
+          <input class="form-control" type="number" min="0" max="23" value="<%= requestItem.collectionStartHour %>" id="deliveryStartHour" name="deliveryStartHour">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="deliveryStartMin">From (Min):</label>
+          <input class="form-control" type="number" min="0" max="59"  value="<%= requestItem.collectionStartMin %>" id="deliveryStartMin" name="deliveryStartMin">
         </div>
       </div>
 
     <div class="modal-body row">
       <div class="form-group col-md-4">
-        <label for="collectionEndDate">To (Day):</label>
-        <input class="form-control" type="date" value="2017-01-25" id="collectionEndDate" value="<%= requestItem.collectionEndDate %>" name="deliveryEndDate">
+        <label for="deliveryEndDate">To (Day):</label>
+        <input class="form-control" type="date" value="<%= requestItem.collectionEndDate %>" id="deliveryEndDate" name="deliveryEndDate">
       </div>
-      <div class="form-group col-md-4">
-        <label for="collectionEndTime">To (Time):</label>
-        <input class="form-control" type="time" id="collectionEndTime" value="<%= requestItem.collectionEndTime %>" name="deliveryEndTime">
+      <div class="form-group col-md-2">
+        <label for="deliveryEndTime">To (Hour):</label>
+        <input class="form-control" type="number" min="0" max="23" value="<%= requestItem.collectionEndHour %>" id="deliveryEndHour" name="deliveryEndHour">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="deliveryEndMin">To (Min):</label>
+        <input class="form-control" type="number" min="0" max="59" value="<%= requestItem.collectionEndMin %>" id="deliveryEndMin" name="deliveryEndMin">
       </div>
     </div>
 
