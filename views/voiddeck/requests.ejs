@@ -43,11 +43,11 @@
 
       Food to be delivered: <strong><%= oneRequest.food %></strong><br>
       Delivery destination: <strong><%= oneRequest.destination %></strong><br>
-      Available collection time range: <br>
+      Collection/Delivery time range: <br>
 
       <p style="text-align:center;">
-        <%= oneRequest.collectionStartDate %><strong> <%= oneRequest.collectionStartTime %> </strong>
-        to <%= oneRequest.collectionEndDate %><strong> <%= oneRequest.collectionEndTime %></strong>
+        <%= oneRequest.collectionStartDate %><strong> <%= oneRequest.collectionStartHour %></strong>:<strong><%= oneRequest.collectionStartMin %> </strong>to <br>
+        <%= oneRequest.collectionEndDate %><strong> <%= oneRequest.collectionEndHour %></strong>:<strong><%= oneRequest.collectionEndMin %> </strong>
         <span style="float:right;">
           <% if (oneRequest.helper) { %>
             <form action=<%= "/voiddeck/party/confirm/" + oneRequest._id + "?_method=PUT" %> method="POST">

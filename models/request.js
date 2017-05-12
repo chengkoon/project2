@@ -33,11 +33,25 @@ const RequestSchema = new mongoose.Schema({
 
   deliveryStartDate: { type: String, default: null },
   deliveryEndDate: { type: String, default: null },
-  deliveryStartTime: { type: String, default: null },
-  deliveryEndTime: { type: String, default: null },
+  // deliveryStartTime: { type: String, default: null },
+  // deliveryEndTime: { type: String, default: null },
+  deliveryStartHour: { type: String, default: null },
+  deliveryStartMin: { type: String, default: null },
+  deliveryEndHour: { type: String, default: null },
+  deliveryEndMin: { type: String, default: null },
+
   //consolidated delivery date+time start and end in UTC format:
-  deliveryStartUTC: { type: Number, default: null },
-  deliveryEndUTC: { type: Number, default: null },
+  deliveryStartUTC: {
+    type: Number,
+    default: null,
+    // validate: [deliveryStartTimeValidator, 'Please enter a valid delivery time range']
+  },
+
+  deliveryEndUTC: {
+    type: Number,
+    default: null,
+    // validate: [deliveryEndTimeValidator, 'Please enter a valid delivery time range']
+  },
 
   members: [],
   helper: [],
@@ -51,6 +65,18 @@ function collectionStartTimeValidator(value) {
 }
 function collectionEndTimeValidator(value) {
   return this.requestCreatedUTC < value;
+}
+function deliveryStartTimeValidator(value) {
+  if (value !== null) {
+    return ((value >= this.collectionStartUTC) && (value < this.deliveryEndUTC));
+  }
+  return true;
+}
+function deliveryEndTimeValidator(value) {
+  if (value !== null) {
+    return value <= collectionEndUTC;
+  }
+  return true;
 }
 
 module.exports = mongoose.model('Request', RequestSchema);
