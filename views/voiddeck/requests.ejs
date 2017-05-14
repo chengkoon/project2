@@ -1,128 +1,27 @@
 <div class="container">
 
-<h2>Your tapau party:</h2>
+  <h2 class="page-header">All requests:</h2>
 
-  <% if (!oneRequest) { %>
-
-    Click <a href="/voiddeck/requests/create">here</a> to create one or look below and join one!
-  <% } %>
-  <% if (oneRequest) { %>
   <ul class="list-group">
+
+    <% requests.forEach(function(request) { %>
     <li class="list-group-item">
 
-      <p style="text-align:left;">
-        <% if (oneRequest.helper.length === 1) { %>
-          Leader: <%= oneRequest.helper[0] %>
-        <% } %>
-        <% if (oneRequest.helper.length === 0) { %>
-          Leader: --
-        <% } %>
-      <span style="float:right;">
-        Members:
-        <% for (var i=0; i<3; i++) { %>
-          <% if ((oneRequest.members[i] == currentUser.name) && (oneRequest.helper.length === 0)) { %>
-            <a href="/voiddeck/requests/<%= oneRequest._id %>"><%= oneRequest.members[i] %></a>
-          <% } %>
-          <% if ((oneRequest.members[i] == currentUser.name) && (oneRequest.helper.length === 1)) { %>
-            <%= oneRequest.members[i] %>
-          <% } %>
-          <% if (!oneRequest.members[i] && oneRequest.helper.length === 0) { %>
-            waiting...
-          <% } %>
-          <% if (!oneRequest.members[i] && oneRequest.helper.length === 1) { %>
-            closed...
-          <% } %>
-          <% if (oneRequest.members[i] !== currentUser.name) { %>
-            <%= oneRequest.members[i] %>
-          <% } %>
-        <% } %>
+      Help me buy: <strong><%= request.food %></strong><br>
+      Destination: <strong><%= request.destination %></strong><br>
+      I can collect from <%= request.collectionStartDate %> <strong><%= request.collectionStartHour %>:<%= request.collectionStartMin %></strong> to
+                         <%= request.collectionEndDate %> <strong><%= request.collectionEndHour %>:<%= request.collectionEndMin %></strong><br>
 
-      </span>
-      </p>
-       <br>
-
-      Food to be delivered: <strong><%= oneRequest.food %></strong><br>
-      Delivery destination: <strong><%= oneRequest.destination %></strong><br>
-      Collection/Delivery time range: <br>
-
-      <p style="text-align:center;">
-        <%= oneRequest.collectionStartDate %><strong> <%= oneRequest.collectionStartHour %></strong>:<strong><%= oneRequest.collectionStartMin %> </strong>to <br>
-        <%= oneRequest.collectionEndDate %><strong> <%= oneRequest.collectionEndHour %></strong>:<strong><%= oneRequest.collectionEndMin %> </strong>
-        <span style="float:right;">
-          <% if (oneRequest.helper) { %>
-            <form action=<%= "/voiddeck/party/confirm/" + oneRequest._id + "?_method=PUT" %> method="POST">
-              <% if (currentUser.confirmedDelivery && oneRequest.helper.length === 1) { %>
-                <button type="submit" class="btn btn-danger disabled">
-                  <% if (currentUser.foodItem) { %>
-                    Received
-                  <% } %>
-                  <% if (currentUser.helper) { %>
-                    Delivered
-                  <% } %>
-                </button>
-              <% } %>
-              <% if (!currentUser.confirmedDelivery && oneRequest.helper.length === 1) { %>
-                <button type="submit" class="btn btn-danger">
-                  <% if (currentUser.foodItem) { %>
-                    Received
-                  <% } %>
-                  <% if (currentUser.helper) { %>
-                    Delivered
-                  <% } %>
-                </button>
-              <% } %>
-            </form>
-          <% } %>
-        </span>
-      </p>
-    </li>
-  <ul>
-  <% } %>
-
-
-  <h2 class="page-header">Other tapau parties:</h2>
-
-
-
-  <ul class="list-group">
-
-    <% requests.forEach(function (requestItem) { %>
-      <%= console.log("currentUser.name is ", currentUser.name) %>
-      <%= console.log("requestItem.members is ", requestItem.members) %>
-      <% if (!requestItem.members.includes(currentUser.name)) { %>
-
-        <li class="list-group-item">
-          <p style="text-align:left;">
-            Leader: ---<a href="/voiddeck/requests/<%= requestItem._id %>/help"> (Help deliver!)</a>
-            <span style="float:right;">
-              Members:
-              <% if (requestItem.members[0]) { %>
-                <%= requestItem.members[0] %>
-              <% } %>
-              <% for (var i=1; i<3; i++) { %>
-                <% if (requestItem.members[i]) { %>
-                , <%= requestItem.members[i] %>
-                <% } %>
-                <% if (!requestItem.members[i]) { %>
-                  , <a href="/voiddeck/requests/<%= requestItem._id %>">join!</a>
-                <% } %>
-              <% } %>
-
-            </span>
-          </p>
-
-          <!-- Help me buy: <strong><%= requestItem.foodItem %></strong><br> -->
-
-          Delivery destination: <strong><%= requestItem.destination %></strong><br>
-          Available collection time range: <br>
-          <center><%= requestItem.collectionStartDate %><strong> <%= requestItem.collectionStartTime %> </strong>
-          to <%= requestItem.collectionEndDate %><strong> <%= requestItem.collectionEndTime %></strong></center>
-
-        </li>
-
+      <% if (request.author.equals(currentUser._id)) { %>
+        click <a href="/voiddeck/requests/<%= request._id %>/edit">me</a> to edit request
       <% } %>
-    <% }) %>
+    </li>
+
+
+    <% })%>
+
   </ul>
+
 
 
 

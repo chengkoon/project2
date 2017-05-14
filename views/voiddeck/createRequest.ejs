@@ -1,5 +1,5 @@
 
-<h3>Ask for food delivery:</h3><a href="/voiddeck/offers/create">or help deliver to others!</a>
+<h3>Make a delivery request!</h3>
 
 <br>
 
@@ -9,70 +9,47 @@
   <form action="/voiddeck/requests/create" method="POST">
 
     <div class="modal-body row">
-      <div class="form-group col-md-4">
-        <label for="foodItem">Help me buy:</label>
-        <input type="text" class="form-control" id="foodItemInput" placeholder="curry puff" name="foodItem">
+      <div class="form-group col-md-6">
+        <label for="foodItem">Help me buy:</label><br>
+        <!-- <input type="text" class="form-control" id="foodItem" placeholder="1 X curry puff from old chang kee" name="foodItem"> -->
+        <textarea name="foodItem" rows="4" placeholder="Please state item, quantity, and shop's name. (e.g. 1 X Curry puff from Old Chang Kee)"></textarea>
       </div>
       <!-- <div class="form-group col-md-4">
-        <label for="foodShop">From:</label>
-        <input class="form-control" id="foodShopInput" placeholder="Old Chang Kee" name="foodShop">
-      </div> -->
-      <div class="form-group col-md-4">
         <label for="destination">Deliver to:</label>
-        <input type="text" class="form-control" id="destinationInput" placeholder="Cinnamon College lift lobby" name="destination">
+        <input type="text" class="form-control" id="destination" placeholder="Cinnamon College lift lobby" name="destination">
+      </div> -->
+      <div class="form-group col-md-6">
+        <label for="destination">Deliver to:</label>
+        <select name="destination">
+          <option value="cinnamon">Cinnamon College Lift Lobby</option>
+          <option value="capt">CAPT Lift Lobby</option>
+          <option value="tembusu">Tembusu College Lift Lobby</option>
+          <option value="nus-yale">NUS Yale Lift Lobby</option>
+        </select>
       </div>
+
     </div>
 
     My available collection day and time:
 
     <div class="modal-body row">
       <div class="form-group col-md-4">
-        <label for="collectionStartDate">From (Date):</label>
-        <input class="form-control" type="date" value="2017-05-11" id="collectionStartDate" name="collectionStartDate">
+        <label for="from">From:</label>
+        <select class="from" name="collectionFrom"></select>
       </div>
-      <!-- <div class="form-group col-md-4">
-        <label for="collectionStartTime">From (Time):</label>
-        <input class="form-control" type="time" id="collectionStartTime" name="collectionStartTime">
-      </div> -->
-      <div class="form-group col-md-2">
-        <label for="collectionStartHour">From (Hour):</label>
-        <input class="form-control" type="number" min="0" max="23" id="collectionStartHour" name="collectionStartHour">
-      </div>
-      <div class="form-group col-md-2">
-        <label for="collectionStartMin">From (Min):</label>
-        <input class="form-control" type="number" min="0" max="59" id="collectionStartMin" name="collectionStartMin">
-      </div>
-    </div>
-
-    <div class="modal-body row">
       <div class="form-group col-md-4">
-        <label for="collectionEndDate">To (Date):</label>
-        <input class="form-control" type="date" value="2017-05-11" id="collectionEndDate" name="collectionEndDate">
+        <label for="to">To:</label>
+        <select class="to" name="collectionTo"></select>
       </div>
-      <!-- <div class="form-group col-md-4">
-        <label for="collectionEndTime">To (Time):</label>
-        <input class="form-control" type="time" id="collectionEndTime" name="collectionEndTime">
-      </div> -->
-      <div class="form-group col-md-2">
-        <label for="collectionEndHour">To (Hour):</label>
-        <input class="form-control" type="number" min="0" max="23" id="collectionEndHour" name="collectionEndHour">
-      </div>
-      <div class="form-group col-md-2">
-        <label for="collectionEndMin">To (Min):</label>
-        <input class="form-control" type="number" min="0" max="59" id="collectionEndMin" name="collectionEndMin">
+      <div class="form-group col-md-4">
+        <label for="rewards">Rewards:</label>
+        <select class="rewards" name="rewards">
+          <% for (let i=1; i<=currentUser.tokens; i++) { %>
+            <option value="<%= i %>"><%= i %> x Token(s)</option>
+          <% } %>
+        </select>
       </div>
     </div>
-
-    <!-- <div class="modal-body row">
-      <div class="form-group col-md-6">
-        <label for="destination">Deliver to:</label>
-        <input type="text" class="form-control" id="destinationInput" placeholder="Cinnamon College lift lobby" name="destination">
-      </div>
-      <div class="form-group col-md-6">
-        <label for="latestBy">Latest by this time:</label>
-        <input class="form-control" id="latestByInput" placeholder="9pm (change this to dropdown)" name="latestBy">
-      </div>
-    </div> -->
 
     <button type="submit" class="btn btn-default">Submit</button>
   </form>

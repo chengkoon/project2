@@ -26,9 +26,9 @@ router.get('/voiddeck/requests/:id', isLoggedIn, voiddeckController.editOrJoin);
 router.get('/voiddeck/requests/:id/edit', isLoggedIn, voiddeckController.editPage);
 router.put('/voiddeck/requests/:id', isLoggedIn, voiddeckController.makeEdit);
 
-//to join as member:
-router.get('/voiddeck/requests/:id/join', isLoggedIn, voiddeckController.joinPage); //passive link, editOrJoin will invoke this link
-router.put('/voiddeck/requests/:id/join', isLoggedIn, voiddeckController.makeJoin);
+// //to join as member:
+// router.get('/voiddeck/requests/:id/join', isLoggedIn, voiddeckController.joinPage); //passive link, editOrJoin will invoke this link
+// router.put('/voiddeck/requests/:id/join', isLoggedIn, voiddeckController.makeJoin);
 
 //to join as leader:
 router.get('/voiddeck/requests/:id/help', isLoggedIn, voiddeckController.help);
@@ -41,9 +41,9 @@ router.delete('/voiddeck/requests/:id', isLoggedIn, voiddeckController.delete);
 //to confirm delivery (for both helpers and requesters)
 router.put('/voiddeck/party/confirm/:id', isLoggedIn, voiddeckController.confirm);
 
-// help offered related things (view all offers and create offers)
-router.get('/voiddeck/offers/create', isLoggedIn, voiddeckController.createOfferPage);
-router.post('/voiddeck/offers/create', isLoggedIn, voiddeckController.createOffer);
+// // help offered related things (view all offers and create offers)
+// router.get('/voiddeck/offers/create', isLoggedIn, voiddeckController.createOfferPage);
+// router.post('/voiddeck/offers/create', isLoggedIn, voiddeckController.createOffer);
 
 
 
