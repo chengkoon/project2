@@ -1,9 +1,11 @@
 require('dotenv').config({ silent: true });
 const express = require('express');
 const path = require('path');
-var session = require('express-session');
-var flash = require('connect-flash');
-var passport = require('./config/ppConfig');
+// const moment = require('moment');
+// moment().format();
+const session = require('express-session');
+const flash = require('connect-flash');
+const passport = require('./config/ppConfig');
 const ejsLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const allRoutes = require('./routes/allRoutes');
@@ -13,7 +15,7 @@ const isLoggedIn = require('./middleware/isLoggedIn');
 
 const Request = require('./models/request');
 
-var app = express();
+const app = express();
 
 // connect to MongoDB based on environment
 if (process.env.NODE_ENV === 'test') {

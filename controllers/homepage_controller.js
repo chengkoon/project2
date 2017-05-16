@@ -21,7 +21,8 @@ let homepageController = {
     User.create({
       email: req.body.email,
       name: req.body.name,
-      password: req.body.password
+      password: req.body.password,
+      tokens: 3
     }, function(err, createdUser) {
       if(err){
         // FLASH

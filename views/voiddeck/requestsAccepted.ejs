@@ -1,10 +1,10 @@
 <div class="container">
 
-  <h2 class="page-header">Current unfulfilled requests:</h2>
+  <h2 class="page-header">Requests you accepted:</h2>
 
   <ul class="list-group">
 
-    <% requests.forEach(function(request) { %>
+    <% user.requestsAccepted.forEach(function(request) { %>
     <li class="list-group-item">
 
       Help me buy: <strong><%= request.food %></strong><br>
@@ -12,23 +12,17 @@
       I can collect from <strong><%= request.collectionFrom %></strong> to
                          <strong><%= request.collectionTo %></strong><br>
 
-      <% if (request.author.equals(currentUser._id)) { %>
+      <!-- <% if (!request.helper) { %>
         click <a href="/voiddeck/requests/<%= request._id %>/edit">me</a> to edit request
+        or here to delete.
       <% } %>
-      <% if (!request.author.equals(currentUser._id) && (!request.helper)) { %>
-        <form action="/voiddeck/help/<%= request._id %>?_method=PUT" method="POST">
-          <button type="submit" class="btn btn-danger">Help Deliver!</button>
-        </form>
-      <% } %>
+      <% if (request.helper) { %>
+        delivery in progress!<br>
+        click here to confirm delivery!
+      <% } %> -->
     </li>
 
 
     <% })%>
 
   </ul>
-
-
-
-
-
-</div>

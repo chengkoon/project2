@@ -1,67 +1,44 @@
-<h2>this is the edit request page</h2>
+<h2>Edit your request:</h2>
 
 <div class="container">
-  <form action=<%= "/voiddeck/requests/" + requestItem._id + "?_method=PUT" %> method="POST">
+  <form action="/voiddeck/requests/<%= request._id %>?_method=PUT" method="POST">
 
     <div class="modal-body row">
-      <div class="form-group col-md-4">
-        <label for="foodItem">Help me buy:</label>
-        <input type="text" class="form-control" id="foodItemInput" value="<%= currentUserInfo.foodItem %>" name="foodItem">
+      <div class="form-group col-md-6">
+        <label for="food">Help me buy:</label>
+        <textarea name="food" rows="4"><%= request.food %></textarea>
       </div>
 
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-6">
         <label for="destination">Deliver to:</label>
-        <% if ((requestItem.members.length > 1) || (requestItem.helper.length === 1)) { %>
-          <input type="text" class="form-control" value="<%= requestItem.destination %>" name="destination" disabled>
-        <% } %>
-        <% if ((requestItem.members.length === 1) && (requestItem.helper.length === 0)) { %>
-          <input type="text" class="form-control" value="<%= requestItem.destination %>" name="destination">
-        <% } %>
+        <select name="destination">
+          <option value="cinnamon">Cinnamon College Lift Lobby</option>
+          <option value="capt">CAPT Lift Lobby</option>
+          <option value="tembusu">Tembusu College Lift Lobby</option>
+          <option value="nus-yale">NUS Yale Lift Lobby</option>
+        </select>
       </div>
+
     </div>
 
     My available collection day and time:
 
     <div class="modal-body row">
       <div class="form-group col-md-4">
-        <label for="collectionStartDate">From (Day):</label>
-        <% if ((requestItem.members.length > 1) || (requestItem.helper.length === 1)) { %>
-          <input class="form-control" type="date" value="<%= requestItem.collectionStartDate %>" id="collectionStartDate" name="collectionStartDate" disabled>
-        <% } %>
-        <% if ((requestItem.members.length === 1) && (requestItem.helper.length === 0)) { %>
-          <input class="form-control" type="date" value="<%= requestItem.collectionStartDate %>" id="collectionStartDate" name="collectionStartDate">
-        <% } %>
+        <label for="from">From:</label>
+        <select class="from" name="collectionFrom"></select>
       </div>
       <div class="form-group col-md-4">
-        <label for="collectionStartTime">From (Time):</label>
-        <% if ((requestItem.members.length > 1) || (requestItem.helper.length === 1)) { %>
-          <input class="form-control" type="time" id="collectionStartTime" value="<%= requestItem.collectionStartTime %>" name="collectionStartTime" disabled>
-        <% } %>
-        <% if ((requestItem.members.length === 1) && (requestItem.helper.length === 0)) { %>
-          <input class="form-control" type="time" id="collectionStartTime" value="<%= requestItem.collectionStartTime %>" name="collectionStartTime">
-        <% } %>
-
-      </div>
-    </div>
-
-    <div class="modal-body row">
-      <div class="form-group col-md-4">
-        <label for="collectionEndDate">To (Day):</label>
-        <% if ((requestItem.members.length > 1) || (requestItem.helper.length === 1)) { %>
-          <input class="form-control" type="date" value="2017-01-25" id="collectionEndDate" value="<%= requestItem.collectionEndDate %>" name="collectionEndDate" disabled>
-        <% } %>
-        <% if ((requestItem.members.length === 1) && (requestItem.helper.length === 0)) { %>
-          <input class="form-control" type="date" value="2017-01-25" id="collectionEndDate" value="<%= requestItem.collectionEndDate %>" name="collectionEndDate">
-        <% } %>
+        <label for="to">To:</label>
+        <select class="to" name="collectionTo"></select>
       </div>
       <div class="form-group col-md-4">
-        <label for="collectionEndTime">To (Time):</label>
-        <% if ((requestItem.members.length > 1) || (requestItem.helper.length === 1)) { %>
-          <input class="form-control" type="time" id="collectionEndTime" value="<%= requestItem.collectionEndTime %>" name="collectionEndTime" disabled>
-        <% } %>
-        <% if ((requestItem.members.length === 1) && (requestItem.helper.length === 0)) { %>
-          <input class="form-control" type="time" id="collectionEndTime" value="<%= requestItem.collectionEndTime %>" name="collectionEndTime">
-        <% } %>
+        <label for="rewards">Rewards:</label>
+        <select class="rewards" name="rewards">
+          <% for (let i=1; i<=currentUser.tokens; i++) { %>
+            <option value="<%= i %>"><%= i %> x Token(s)</option>
+          <% } %>
+        </select>
       </div>
     </div>
 
@@ -70,15 +47,8 @@
 
 
   </form>
-  <form action=<%= "/voiddeck/requests/" + requestItem._id + "?_method=DELETE" %> method="POST">
-    <button type="submit" class="btn btn-danger">
-      <% if (requestItem.members.length > 1) { %>
-        Leave
-      <% } %>
-      <% if (requestItem.members.length === 1) { %>
-        Delete
-      <% } %>
-    </button>
+  <form action=<%= "/voiddeck/requests/" + request._id + "?_method=DELETE" %> method="POST">
+    <button type="submit" class="btn btn-danger">Delete</button>
   </form>
 
 </div>

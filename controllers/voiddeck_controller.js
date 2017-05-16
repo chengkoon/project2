@@ -1,5 +1,7 @@
 let Request = require('../models/request')
 let User = require('../models/user')
+var moment = require('moment');
+moment().format();
 
 var millisecondConverter = function(date,hour,min) {
   let dateMS = date.split('-');
@@ -17,21 +19,13 @@ let voiddeckController = {
   },
 
   listRequests: (req,res) => {
-    // res.render('voiddeck/requests')
-    Request.find({}, (err, requests) => {
+
+    Request.find({
+      helper: { $eq: null }
+    }, (err, requests) => {
       if (err) throw err
       else {
-        // console.log("req.user is ",req.user);
-        // console.log("requests is ",requests);
-        Request.findOne({
-          author: req.user._id
-        }, (err, oneRequest) => {
-          if (err) throw err
-          else {
-            // console.log("onerequest is ", oneRequest);
-            res.render('voiddeck/requests', { requests: requests, oneRequest: oneRequest, currentUser: req.user})
-          }
-        })
+        res.render('voiddeck/requests', { requests: requests, currentUser: req.user })
       }
     })
   },
@@ -51,117 +45,42 @@ let voiddeckController = {
       res.redirect('/voiddeck');
     }
 
-    let collectionStartUTC = millisecondConverter(req.body.collectionStartDate, req.body.collectionStartHour, req.body.collectionStartMin);
-    let collectionEndUTC = millisecondConverter(req.body.collectionEndDate, req.body.collectionEndHour, req.body.collectionEndMin);
+    // let collectionStartUTC = millisecondConverter(req.body.collectionStartDate, req.body.collectionStartHour, req.body.collectionStartMin);
+    // let collectionEndUTC = millisecondConverter(req.body.collectionEndDate, req.body.collectionEndHour, req.body.collectionEndMin);
     let dateNowUTC = Date.now();
 
-    console.log("c.start, end, and dateNowUTC are...", collectionStartUTC, collectionEndUTC, dateNowUTC);
+    console.log("the req.body is...", req.body);
+    var collectionFromUTC = moment(req.body.collectionFrom, 'ddd DD/MM/YYYY h:mm A').valueOf();
+    var collectionToUTC = moment(req.body.collectionTo, 'ddd DD/MM/YYYY h:mm A').valueOf();
 
     let newRequest = new Request({
 
-      author: req.user,
+      author: req.user._id,
+      food: req.body.food,
       destination: req.body.destination,
       requestCreatedUTC: dateNowUTC,
-
-      collectionStartDate: req.body.collectionStartDate,
-      collectionEndDate: req.body.collectionEndDate,
-      // collectionStartTime: req.body.collectionStartTime,
-      // collectionEndTime: req.body.collectionEndTime,
-      collectionStartHour: req.body.collectionStartHour,
-      collectionStartMin: req.body.collectionStartMin,
-      collectionEndHour: req.body.collectionEndHour,
-      collectionEndMin: req.body.collectionEndMin,
-      collectionStartUTC: collectionStartUTC,
-      collectionEndUTC: collectionEndUTC
+      collectionFrom: req.body.collectionFrom,
+      collectionTo: req.body.collectionTo,
+      collectionFromUTC: collectionFromUTC,
+      collectionToUTC: collectionToUTC
     })
-
-
-    // Request.create({
-    //
-    //   author: req.user,
-    //   destination: req.body.destination,
-    //
-    //   collectionStartDate: req.body.collectionStartDate,
-    //   collectionEndDate: req.body.collectionEndDate,
-    //   // collectionStartTime: req.body.collectionStartTime,
-    //   // collectionEndTime: req.body.collectionEndTime,
-    //   collectionStartHour: req.body.collectionStartHour,
-    //   collectionStartMin: req.body.collectionStartHour,
-    //   collectionEndHour: req.body.collectionEndHour,
-    //   collectionEndMin: req.body.collectionEndMin,
-    //   collectionStartUTC: collectionStartUTC,
-    //   collectionEndUTC: collectionEndUTC
-    //
-    // }, (err, newRequest) => {
-    //   if (err) {
-    //     // FLASH
-    //     delete newRequest;
-    //     req.flash('error', 'Could not create your delivery request');
-    //     res.redirect('/voiddeck/requests/create');
-    //   }
-    //   else if (collectionStartUTC >= collectionEndUTC) {
-    //     delete newRequest;
-    //     req.flash('error', 'Collection time range error: Your collection start time should be earlier than the end time.');
-    //     res.redirect('/voiddeck/requests/create');
-    //   }
-    //   else if ((collectionStartUTC < dateNowUTC) || (collectionEndUTC <= dateNowUTC)) {
-    //     delete newRequest;
-    //     req.flash('error', 'Collection time range error: Your collection time range should be later than the current time.');
-    //     res.redirect('/voiddeck/requests/create');
-    //   }
-    //   else {
-    //     newRequest.members.push(req.user.name);
-    //     newRequest.food.push(req.body.foodItem);
-    //     newRequest.save((err, savedRequest) => {
-    //       if (err) throw err
-    //       else {
-    //         User.findOneAndUpdate({
-    //           _id: req.user._id
-    //         }, {
-    //           foodItem: req.body.foodItem,
-    //           party: newRequest._id
-    //         }, (err, thing) => {
-    //           if (err) throw err
-    //           else {
-    //             req.flash('success', 'Request for delivery creted successfully.');
-    //             res.redirect('/voiddeck')
-    //           }
-    //         })
-    //       }
-    //     })
-    //   }
-    // });
-
-    newRequest.members.push(req.user.name);
-    newRequest.food.push(req.body.foodItem);
-
-
-    //change user's requestedOrHelping to true
-    // req.user.requestedOrHelping = true;
-    // req.user.foodItem = req.body.foodItem;
-    // req.user.save();
 
     newRequest.save(function (err, savedEntry) {
       if (err) {
-
         req.flash('error', 'Please enter a valid time range for collection time.');
         res.redirect('/voiddeck');
       }
-
-
       else {
         User.findOneAndUpdate({
           _id: req.user._id
         }, {
-          foodItem: req.body.foodItem,
-          party: newRequest._id
+          // foodItem: req.body.foodItem,
+          // party: newRequest._id
+          tokens: req.user.tokens - req.body.rewards,
+          $push: { requestsMade: savedEntry._id }
         }, (err, thing) => {
           if (err) throw err
           else {
-            console.log("savedEntry is...", savedEntry);
-            console.log("savedEntry.collectionStartUTC is...", savedEntry.collectionStartUTC);
-            console.log("collectionStartUTC is...", collectionStartUTC);
-            console.log("hehehehehe");
             res.redirect('/voiddeck')
           }
         })
@@ -170,9 +89,6 @@ let voiddeckController = {
   },
 
   editOrJoin: (req,res) => {
-    // console.log("Hi, ", req.user);
-    // console.log("current session user id is: ", req.user._id);
-    // console.log("can i get the params? ", req.params);
     Request.find({_id: req.params.id})
     .populate('author')
     .exec(function(err, authorInfo) {
@@ -185,12 +101,6 @@ let voiddeckController = {
       }
 
       else if (authorInfo[0].author.length) {
-        // console.log("original author id is ", authorInfo[0].author._id);
-        // console.log("current session user id is ", req.user._id);
-
-        // console.log("authorinfo everything is ", authorInfo);
-        // console.log("authorinfo str is ", authorInfo[0].author._id.str);
-        // console.log("req.user._id str is ", req.user._id.str);
 
         for (var i=0; i<authorInfo[0].author.length; ++i) {
           //if while looping thru the for loop, there's a match then...
@@ -224,10 +134,33 @@ let voiddeckController = {
     })
   },
 
+  listRequestsMade: (req,res) => {
+    User.findOne({ _id: req.user._id })
+    .populate('requestsMade')
+    .exec(function(err, user) {
+      if (err) throw err
+      else {
+        res.render('voiddeck/requestsMade', { user: user });
+      }
+    })
+  },
+
+  listRequestsAccepted: (req,res) => {
+    User.findOne({ _id: req.user._id })
+    .populate('requestsAccepted')
+    .exec(function(err, user) {
+      if (err) throw err
+      else {
+        res.render('voiddeck/requestsAccepted', { user: user });
+      }
+    })
+  },
+
   editPage: (req,res) => {
     console.log(req.params);
-    Request.findById(req.params.id, (err, requestItem) => {
+    Request.findById(req.params.id, (err, request) => {
       if (err) throw err
+      // else if request.author is not req.user._id then redirect to another page with flash msg
       else {
         User.findOne({
           _id: req.user._id
@@ -235,7 +168,7 @@ let voiddeckController = {
           if (err) throw err
           else {
             console.log("currentUserInfo is ", currentUserInfo);
-            res.render('voiddeck/editRequest', { requestItem: requestItem, currentUserInfo: currentUserInfo})
+            res.render('voiddeck/editRequest', { request: request, currentUserInfo: currentUserInfo})
           }
         })
         // console.log("we are here: ", requestItem);
@@ -248,37 +181,39 @@ let voiddeckController = {
   makeEdit: (req,res) => {
     // console.log("req.params is: ", req.params);
 
+    let newCollectionStartUTC = millisecondConverter(req.body.collectionStartDate, req.body.collectionStartHour, req.body.collectionStartMin);
+    let newCollectionEndUTC = millisecondConverter(req.body.collectionEndDate, req.body.collectionEndHour, req.body.collectionEndMin);
+    let dateNowUTC = Date.now();
+
     Request.findOne({
       _id: req.params.id
     }, (err, thisRequest) => {
       if (err) throw err
-      else if ((thisRequest.members.length > 1) || (thisRequest.helper.length === 1)) {
-        // let the member edit the food ONLY if there's already more than 1 member
-        let thisIndex = thisRequest.members.indexOf(req.user.name);
-        thisRequest.food.splice(thisIndex,1);
-        thisRequest.food.push(req.body.foodItem);
-        thisRequest.save();
-        req.user.foodItem = req.body.foodItem;
-        req.user.save();
-        res.redirect('/voiddeck/requests/view');
+
+      else if ((newCollectionStartUTC < dateNowUTC) || (newCollectionStartUTC >= newCollectionEndUTC )) {
+        req.flash('error', 'Your new collection time range is not valid.');
+        res.redirect("/voiddeck/requests/"+thisRequest._id+"/edit");
       }
-      else if (thisRequest.members.length === 0) {
+      else {
+
         Request.findOneAndUpdate({
           _id: req.params.id
         }, {
-          foodItem: req.body.foodItem,
 
+          food: req.body.food,
           destination: req.body.destination,
-          latestBy: req.body.latestBy,
 
           collectionStartDate: req.body.collectionStartDate,
           collectionEndDate: req.body.collectionEndDate,
-          collectionStartTime: req.body.collectionStartTime,
-          collectionEndTime: req.body.collectionEndTime,
-          collectionStartUTC: millisecondConverter(req.body.collectionStartDate, req.body.collectionStartTime),
-          collectionEndUTC: millisecondConverter(req.body.collectionEndDate, req.body.collectionEndTime)
-        }, (err, requestItem) => {
+          collectionStartHour: req.body.collectionStartHour,
+          collectionStartMin: req.body.collectionStartMin,
+          collectionEndHour: req.body.collectionEndHour,
+          collectionEndMin: req.body.collectionEndMin,
+          collectionStartUTC: newCollectionStartUTC,
+          collectionEndUTC: newCollectionEndUTC
+        }, (err, editedRequest) => {
           if (err) throw err
+          req.flash("success", "Your request has been successfully edited")
           res.redirect('/voiddeck/requests/view');
         })
       }
@@ -330,10 +265,10 @@ let voiddeckController = {
         console.log("successfully entered into makeJoin");
 
         req.user.party = requestItem._id;
-        req.user.foodItem = req.body.foodItem;
+        req.user.food = req.body.food;
         req.user.save();
 
-        requestItem.food.push(req.body.foodItem);
+        requestItem.food.push(req.body.food);
         console.log("req.user is ", req.user);
         requestItem.members.push(req.user.name);
         requestItem.author.push(req.user._id);
@@ -352,75 +287,65 @@ let voiddeckController = {
     })
   },
 
-  help: (req,res) => {
-    if (req.user.party) { //meaning user is alr in a party
-      req.flash('error', 'You are already in a party! (Leave/delete your party before helping others)');
-      res.redirect('/voiddeck');
-    }
-    else if (req.user.helper) {
-      req.flash('error', 'You are already a helper for another party! (Complete that quest first)');
-      res.redirect('/voiddeck');
-    }
-    else {
-      res.redirect('/voiddeck/help/'+req.params.id)
-    }
-  },
+  helpDeliver: (req,res) => {
 
-  helpPage: (req,res) => {
-    console.log("helpPage supposed to be loaded, req.params is", req.params);
-    Request.findOne({
-      _id: req.params.id
-    }, (err, requestItem) => {
-      if (err) throw err
-      else {
-        console.log("This is requestItem", requestItem);
-        res.render('voiddeck/helpDeliver', {requestItem: requestItem});
-      }
-    })
-  },
-
-  makeHelp: (req,res) => {
-
-    let deliveryStartUTC = millisecondConverter(req.body.deliveryStartDate, req.body.deliveryStartHour, req.body.deliveryStartMin);
-    let deliveryEndUTC = millisecondConverter(req.body.deliveryEndDate, req.body.deliveryEndHour, req.body.deliveryEndMin);
-    let dateNowUTC = Date.now();
+    // let deliveryStartUTC = millisecondConverter(req.body.deliveryStartDate, req.body.deliveryStartHour, req.body.deliveryStartMin);
+    // let deliveryEndUTC = millisecondConverter(req.body.deliveryEndDate, req.body.deliveryEndHour, req.body.deliveryEndMin);
+    // let dateNowUTC = Date.now();
 
     // let deliveryStartUTC = millisecondConverter(req.body.deliveryStartDate, req.body.deliveryStartTime);
     // let deliveryEndUTC = millisecondConverter(req.body.deliveryEndDate, req.body.deliveryEndTime);
 
-    Request.findOne({
+    Request.findOneAndUpdate({
       _id: req.params.id
-    }, (err, requestToBeChecked) => {
+    }, {
+      helper: req.user._id
+    }, (err, requestToBeAccepted) => {
       if (err) throw err
-      else if ((deliveryStartUTC < requestToBeChecked.collectionStartUTC) || (deliveryEndUTC > requestToBeChecked.collectionEndUTC) ) {
-        req.flash('error', 'Please enter a valid new time range (has to be within the old collection time range).')
-        res.redirect('/voiddeck/help/'+req.params.id);
-      }
       else {
-        console.log("we are HERE IN THE MAKEHELP FORM");
-        req.user.helper = true;
-        req.user.save();
-        Request.findOneAndUpdate({
-          _id: req.params.id
+        User.findOneAndUpdate({
+          _id: req.user._id
         }, {
-          deliveryStartDate: req.body.deliveryStartDate,
-          deliveryEndDate: req.body.deliveryEndDate,
-          deliveryStartTime: req.body.deliveryStartTime,
-          deliveryEndTime: req.body.deliveryEndTime,
-          deliveryStartUTC: deliveryStartUTC,
-          deliveryEndUTC: deliveryEndUTC
-        }, (err, requestToBeHelped) => {
-          if (err) throw err
-          else {
-            requestToBeHelped.helper.push(req.user.name);
-            requestToBeHelped.author.push(req.user._id);
-            requestToBeHelped.save();
-            // res.flash('success','You are now helping deliver food')
-            res.redirect('/voiddeck');
-          }
+          $push: { requestsAccepted: requestToBeAccepted._id }
+        }, (err, user) => {
+          res.redirect('/voiddeck/requests/accepted');
         })
       }
     })
+
+    // Request.findOne({
+    //   _id: req.params.id
+    // }, (err, requestToBeChecked) => {
+    //   if (err) throw err
+    //   // else if ((deliveryStartUTC < requestToBeChecked.collectionStartUTC) || (deliveryEndUTC > requestToBeChecked.collectionEndUTC) ) {
+    //   //   req.flash('error', 'Please enter a valid new time range (has to be within the old collection time range).')
+    //   //   res.redirect('/voiddeck/help/'+req.params.id);
+    //   // }
+    //   else {
+    //     console.log("we are HERE IN THE MAKEHELP FORM");
+    //     req.user.helper = true;
+    //     req.user.save();
+    //     Request.findOneAndUpdate({
+    //       _id: req.params.id
+    //     }, {
+    //       deliveryStartDate: req.body.deliveryStartDate,
+    //       deliveryEndDate: req.body.deliveryEndDate,
+    //       deliveryStartTime: req.body.deliveryStartTime,
+    //       deliveryEndTime: req.body.deliveryEndTime,
+    //       deliveryStartUTC: deliveryStartUTC,
+    //       deliveryEndUTC: deliveryEndUTC
+    //     }, (err, requestToBeHelped) => {
+    //       if (err) throw err
+    //       else {
+    //         requestToBeHelped.helper.push(req.user.name);
+    //         requestToBeHelped.author.push(req.user._id);
+    //         requestToBeHelped.save();
+    //         // res.flash('success','You are now helping deliver food')
+    //         res.redirect('/voiddeck');
+    //       }
+    //     })
+    //   }
+    // })
   },
 
   confirm: (req,res) => {
@@ -458,7 +383,7 @@ let voiddeckController = {
               User.findOneAndUpdate({
                 _id: req.user._id
               }, {
-                foodItem: null,
+                food: null,
                 party: null
               }, (err, nowDelete) => {
                 res.redirect('/voiddeck/requests/view')
@@ -476,7 +401,7 @@ let voiddeckController = {
           User.findOneAndUpdate({
             _id: req.user._id
           }, {
-            foodItem: null,
+            food: null,
             party: null
           }, (err, nowDelete) => {
             res.redirect('/voiddeck/requests/view')
@@ -505,7 +430,7 @@ let voiddeckController = {
 
     let newRequest = new Request({
       author: req.user,
-      foodItem: req.body.foodItem,
+      food: req.body.food,
       foodShop: req.body.foodShop,
       destination: req.body.destination,
       latestBy: req.body.latestBy,

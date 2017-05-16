@@ -6,16 +6,38 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="/css/bootstrap.css">
   <link rel="stylesheet" href="/css/style.css">
-  <title>Document</title>
+
+  <script src="/js/moment.js"></script>
+  <script>
+    moment().format();
+  </script>
+
+  <script
+  			  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  			  crossorigin="anonymous">
+  </script>
+
+  <script src="/js/main.js"></script>
+  <title>Tapau App</title>
 </head>
 <body>
   <div class="container">
       <div class="header clearfix">
         <nav>
+          <ul class="nav nav-pills pull-left">
+            <li role="presentation"><h3><a href="/voiddeck/requests/view">Tapau</a></h3></li>
+            <% if (currentUser) { %>
+              <li role="presentation"><h4>Tokens X <%= currentUser.tokens %></h4></li>
+            <% } %>
+
+          </ul>
           <ul class="nav nav-pills pull-right">
           <% if (currentUser) { %>
             <!-- <li role="presentation"><a href="/voiddeck/requests/create">I'm hungry!</a></li> -->
-            <li role="presentation"><a href="/voiddeck/requests/view">All Food Parties</a></li>
+            <li role="presentation"><a href="/voiddeck/requests/view">All Requests</a></li>
+            <li role="presentation"><a href="/voiddeck/requests/made">Your Requests</a></li>
+            <li role="presentation"><a href="/voiddeck/requests/accepted">Requests Accepted</a></li>
             <!-- <li role="presentation"><a href="/profile">Profile</a></li> -->
             <li role="presentation"><a href="/logout">Sign out</a></li>
           <% }; %>
@@ -25,12 +47,12 @@
           <% }; %>
           </ul>
         </nav>
-        <h3 class="text-muted"><a href="/voiddeck/requests/view">Tapau</a></h3>
+        <!-- <h3 class="text-muted"><a href="/voiddeck/requests/view">Tapau</a></h3> -->
       </div>
 
-      <% if (currentUser) { %>
+      <!-- <% if (currentUser) { %>
         <h5>Hi <%= currentUser.name %></h5>
-      <% }; %>
+      <% }; %> -->
 
       <div class="row">
 

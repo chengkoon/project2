@@ -23,10 +23,14 @@ var UserSchema = new mongoose.Schema({
     minlength: [8, 'Password must be between 8 and 99 characters'],
     maxlength: [99, 'Password must be between 8 and 99 characters'],
   },
-  foodItem: { type: String, default: null },
-  helper: { type: Boolean, default: false },
-  party: { type: mongoose.Schema.Types.ObjectId, ref: 'Request', default: null },
-  confirmedDelivery: { type: Boolean, default: false }
+  requestsMade: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Request' }],
+  requestsAccepted: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Request' }],
+  // foodItem: { type: String, default: null },
+  // helper: { type: Boolean, default: false },
+  // party: { type: mongoose.Schema.Types.ObjectId, ref: 'Request', default: null },
+  // confirmedDelivery: { type: Boolean, default: false }
+
+  tokens: { type: Number, default: null }
 
 });
 
