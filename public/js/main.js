@@ -22,8 +22,8 @@
 
         while (current <= end) {
             i = current.format('ddd DD/MM/YYYY h:mm A');
-            $select.append($('<option></option>').val(j));
-            $select2.append($('<option id="'+ j +'"></option>'));
+            $select.append($('<option></option>').attr("class", j).html(i));
+            $select2.append($('<option id="'+ j +'"></option>').html(i));
 
             // result.push(current.format('ddd DD/MM/YYYY h:mm A'));
             current.add(15, 'minutes');
@@ -32,7 +32,8 @@
 
         $('.from').change(function () {
 
-            var chosenCollectionTimeFrom = parseInt($(this).val()); // 1,2,3,4, or ...
+            // var chosenCollectionTimeFrom = parseInt($(this).val()); // 1,2,3,4, or ...
+            var chosenCollectionTimeFrom = parseInt($('select[name="collectionFrom"] :selected').attr('class'));
             var newDefault = chosenCollectionTimeFrom + 2;
             var chosenTimeFrom = $('.from option[value="'+chosenCollectionTimeFrom+'"]').text();
             var chosenTimeFromUTC = moment(chosenTimeFrom, 'ddd DD/MM/YYYY h:mm A').valueOf();

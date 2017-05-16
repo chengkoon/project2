@@ -18,9 +18,15 @@ router.get('/voiddeck', voiddeckController.listRequests);
 router.get('/voiddeck/requests/view', isLoggedIn, voiddeckController.listRequests);
 router.get('/voiddeck/requests/create', isLoggedIn, voiddeckController.createRequestPage);
 router.post('/voiddeck/requests/create', isLoggedIn, voiddeckController.createRequest);
+
+//individual level - requests made and/or accepted
+router.get('/voiddeck/requests/made', isLoggedIn, voiddeckController.listRequestsMade);
+router.get('/voiddeck/requests/accepted', isLoggedIn, voiddeckController.listRequestsAccepted);
 router.get('/voiddeck/requests/:id', isLoggedIn, voiddeckController.editOrJoin);
 // ^from the list screen, user clicks on each request (checks if it's for edit or commit)
 // router.put('/voiddeck/requests/:id', isLoggedIn, voiddeckController.updateOrCommitTest);
+
+
 
 //to edit:
 router.get('/voiddeck/requests/:id/edit', isLoggedIn, voiddeckController.editPage);
@@ -31,9 +37,9 @@ router.put('/voiddeck/requests/:id', isLoggedIn, voiddeckController.makeEdit);
 // router.put('/voiddeck/requests/:id/join', isLoggedIn, voiddeckController.makeJoin);
 
 //to join as leader:
-router.get('/voiddeck/requests/:id/help', isLoggedIn, voiddeckController.help);
-router.get('/voiddeck/help/:id', isLoggedIn, voiddeckController.helpPage);
-router.put('/voiddeck/help/:id', isLoggedIn, voiddeckController.makeHelp);
+// router.get('/voiddeck/requests/:id/help', isLoggedIn, voiddeckController.help);
+// router.get('/voiddeck/help/:id', isLoggedIn, voiddeckController.helpPage);
+router.put('/voiddeck/help/:id', isLoggedIn, voiddeckController.helpDeliver);
 
 //to delete:
 router.delete('/voiddeck/requests/:id', isLoggedIn, voiddeckController.delete);
