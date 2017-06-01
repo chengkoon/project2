@@ -58,6 +58,7 @@ let voiddeckController = {
       author: req.user._id,
       food: req.body.food,
       destination: req.body.destination,
+      tokens: req.body.rewards,
       requestCreatedUTC: dateNowUTC,
       collectionFrom: req.body.collectionFrom,
       collectionTo: req.body.collectionTo,
@@ -157,86 +158,98 @@ let voiddeckController = {
   },
 
   editPage: (req,res) => {
-    console.log(req.params);
     Request.findById(req.params.id, (err, request) => {
       if (err) throw err
       // else if request.author is not req.user._id then redirect to another page with flash msg
       else {
-        User.findOne({
-          _id: req.user._id
-        }, (err, currentUserInfo) => {
-          if (err) throw err
-          else {
-            console.log("currentUserInfo is ", currentUserInfo);
-            res.render('voiddeck/editRequest', { request: request, currentUserInfo: currentUserInfo})
-          }
-        })
-        // console.log("we are here: ", requestItem);
-        // res.render('voiddeck/editRequest', { requestItem: requestItem})
-        //fill the form with values from requestItem in the editRequest form
+        res.render('voiddeck/editRequest', { request: request, tokens: req.user.tokens + request.tokens })
       }
     })
   },
 
   makeEdit: (req,res) => {
-    // console.log("req.params is: ", req.params);
 
-    let newCollectionStartUTC = millisecondConverter(req.body.collectionStartDate, req.body.collectionStartHour, req.body.collectionStartMin);
-    let newCollectionEndUTC = millisecondConverter(req.body.collectionEndDate, req.body.collectionEndHour, req.body.collectionEndMin);
+    var collectionFromUTC = moment(req.body.collectionFrom, 'ddd DD/MM/YYYY h:mm A').valueOf();
+    var collectionToUTC = moment(req.body.collectionTo, 'ddd DD/MM/YYYY h:mm A').valueOf();
     let dateNowUTC = Date.now();
+    let changedRewards = parseInt(req.body.rewards);
 
     Request.findOne({
       _id: req.params.id
     }, (err, thisRequest) => {
       if (err) throw err
 
-      else if ((newCollectionStartUTC < dateNowUTC) || (newCollectionStartUTC >= newCollectionEndUTC )) {
-        req.flash('error', 'Your new collection time range is not valid.');
-        res.redirect("/voiddeck/requests/"+thisRequest._id+"/edit");
+      else if (thisRequest.helper) {
+        console.log("1111111111")
+        req.flash("error", "Failed to edit request as someone has accepted to fulfill your request.");
+        res.redirect('/voiddeck/requests/view');
       }
+
       else {
 
-        Request.findOneAndUpdate({
-          _id: req.params.id
-        }, {
+        if (thisRequest.tokens !== changedRewards) {
+          console.log("thisRequest.tokens and changedRewards are...", thisRequest.tokens, changedRewards)
+          console.log("typeof thisRequest.tokens and changedRewards are...", typeof thisRequest.tokens, typeof changedRewards)
 
-          food: req.body.food,
-          destination: req.body.destination,
+          User.findOneAndUpdate({
+            _id: req.user.id
+          }, {
+            tokens: req.user.tokens + thisRequest.tokens - changedRewards
+          }, (err, editedUser) => {
+            if (err) throw err;
+            else {
+              Request.findOneAndUpdate({
+                _id: req.params.id
+              }, {
 
-          collectionStartDate: req.body.collectionStartDate,
-          collectionEndDate: req.body.collectionEndDate,
-          collectionStartHour: req.body.collectionStartHour,
-          collectionStartMin: req.body.collectionStartMin,
-          collectionEndHour: req.body.collectionEndHour,
-          collectionEndMin: req.body.collectionEndMin,
-          collectionStartUTC: newCollectionStartUTC,
-          collectionEndUTC: newCollectionEndUTC
-        }, (err, editedRequest) => {
-          if (err) throw err
-          req.flash("success", "Your request has been successfully edited")
-          res.redirect('/voiddeck/requests/view');
-        })
+                food: req.body.food,
+                destination: req.body.destination,
+                tokens: changedRewards,
+                requestCreatedUTC: dateNowUTC,
+                collectionFrom: req.body.collectionFrom,
+                collectionTo: req.body.collectionTo,
+                collectionFromUTC: collectionFromUTC,
+                collectionToUTC: collectionToUTC
+
+              }, (err, editedRequest) => {
+                if (err) {
+                  req.flash("error", "Unable to edit request, please try again");
+                  res.redirect("/voiddeck/requests/view");
+                }
+                else {
+                  req.flash("success", "Your request has been successfully edited")
+                  res.redirect('/voiddeck/requests/view');
+                }
+              })
+            }
+          })
+        }
+
+        // Request.findOneAndUpdate({
+        //   _id: req.params.id
+        // }, {
+        //
+        //   food: req.body.food,
+        //   destination: req.body.destination,
+        //   tokens: changedRewards,
+        //   requestCreatedUTC: dateNowUTC,
+        //   collectionFrom: req.body.collectionFrom,
+        //   collectionTo: req.body.collectionTo,
+        //   collectionFromUTC: collectionFromUTC,
+        //   collectionToUTC: collectionToUTC
+        //
+        // }, (err, editedRequest) => {
+        //   if (err) {
+        //     req.flash("error", "Unable to edit request, please try again");
+        //     res.redirect("/voiddeck/requests/view");
+        //   }
+        //   else {
+        //     req.flash("success", "Your request has been successfully edited")
+        //     res.redirect('/voiddeck/requests/view');
+        //   }
+        // })
       }
     })
-
-    // Request.findOneAndUpdate({
-    //   _id: req.params.id
-    // }, {
-    //   foodItem: req.body.foodItem,
-    //
-    //   destination: req.body.destination,
-    //   latestBy: req.body.latestBy,
-    //
-    //   collectionStartDate: req.body.collectionStartDate,
-    //   collectionEndDate: req.body.collectionEndDate,
-    //   collectionStartTime: req.body.collectionStartTime,
-    //   collectionEndTime: req.body.collectionEndTime,
-    //   collectionStartUTC: millisecondConverter(req.body.collectionStartDate, req.body.collectionStartTime),
-    //   collectionEndUTC: millisecondConverter(req.body.collectionEndDate, req.body.collectionEndTime)
-    // }, (err, requestItem) => {
-    //   if (err) throw err
-    //   res.redirect('/voiddeck/requests/view');
-    // })
   },
 
   joinPage: (req,res) => {
@@ -370,50 +383,15 @@ let voiddeckController = {
   },
 
   delete: (req,res) => {
-    Request.findOne({
+    Request.findOneAndRemove({
       _id: req.params.id
-    }, (err, requestToBeDeleted) => {
-      if (err) throw err
+    }, (err) => {
+      if (err) throw err;
       else {
-        console.log("requestToBeDeleted is...", requestToBeDeleted);
-        if (requestToBeDeleted.members.length === 1) {
-          Request.findByIdAndRemove(requestToBeDeleted._id, (err, requestItem) => {
-            if (err) throw err
-            else {
-              User.findOneAndUpdate({
-                _id: req.user._id
-              }, {
-                food: null,
-                party: null
-              }, (err, nowDelete) => {
-                res.redirect('/voiddeck/requests/view')
-              })
-            }
-          })
-        }
-        else {
-          let thisIndex = requestToBeDeleted.members.indexOf(req.user.name);
-          requestToBeDeleted.members.splice(thisIndex,1);
-          requestToBeDeleted.food.splice(thisIndex,1);
-          requestToBeDeleted.author.splice(thisIndex,1);
-          requestToBeDeleted.save();
-
-          User.findOneAndUpdate({
-            _id: req.user._id
-          }, {
-            food: null,
-            party: null
-          }, (err, nowDelete) => {
-            res.redirect('/voiddeck/requests/view')
-          })
-        }
+        console.log('Request deleted!');
+        res.redirect('/voiddeck/requests/view');
       }
     })
-    console.log("req.params is.........", req.params);
-    // Request.findByIdAndRemove(req.params.id, (err, requestItem) => {
-    //   if (err) throw err
-    //   res.redirect('/voiddeck/requests/view')
-    // })
   },
 
   createOfferPage: (req,res) => {

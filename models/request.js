@@ -10,6 +10,7 @@ const RequestSchema = new mongoose.Schema({
   food: { type: String, default: null },
 
   destination: { type: String, default: null },
+  tokens: { type: Number, default: null },
   requestCreatedUTC: { type: Number, default: null },
   collectionFrom: { type: String, default: null },
   collectionTo: { type: String, default: null },

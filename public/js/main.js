@@ -1,4 +1,26 @@
-  $(function(){
+
+  $(document).ready(function(){
+
+    // $(".user-menu li:nth-child(2)").addClass('active');
+    var activeIndex = parseInt(sessionStorage.getItem('mySelectValue')) + 1;
+    if (activeIndex) {
+        // $('.pull-right li:nth-child('+activeIndex+')').addClass('active');
+        $('.user-menu').find('.active').removeClass('active');
+        $('.user-menu li:nth-child('+activeIndex+')').addClass('active');
+    }
+    else {
+      $('.user-menu li:nth-child(1)').addClass('active');
+    }
+    // } else {
+    //     $('.pull-right:nth-child('+activeIndex+')').addClass('active');
+    // }
+
+
+    $('.user-menu li').on('click', function() {
+      var activeIndex = $(this).index();
+      sessionStorage.setItem('mySelectValue', activeIndex);
+    })
+
 
     // function intervals(startString) {
         var startString = Date();
