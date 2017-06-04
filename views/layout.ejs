@@ -13,18 +13,31 @@
     moment().format();
   </script>
 
-  <script
-          src="https://code.jquery.com/jquery-3.2.1.min.js"
-          integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-          crossorigin="anonymous">
-  </script>
-  <script src="/js/main.js"></script>
+
 
 
   <title>Tapau App</title>
 </head>
 <body>
   <div class="container" id="testtest">
+    <div>
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a href="/voiddeck/requests/view">Help Deliver</a>
+        </li>
+        <li>
+          <a href="/voiddeck/requests/create">Your Requests</a>
+        </li>
+        <li>
+          <a href="home3">Home3</a>
+        </li>
+      </ul>
+      <!-- <div class="tab-content">
+        <div class="tab-pane" id="home">...</div>
+        <div role="tabpanel" class="tab-pane" id="home2">...</div>
+        <div role="tabpanel" class="tab-pane" id="home3">...</div>
+      </div> -->
+    </div>
       <nav class="header clearfix">
         <!-- <nav> -->
           <div class="nav nav-pills pull-left">
@@ -36,22 +49,24 @@
           </div>
           <!-- <ul class="nav nav-pills pull-right"> -->
           <% if (currentUser) { %>
-          <ul class="nav nav-pills pull-right user-menu">
+
+          <ul class="nav nav-tabs pull-right user-menu">
             <!-- <li role="presentation"><a href="/voiddeck/requests/create">I'm hungry!</a></li> -->
             <li role="presentation"><a href="/voiddeck/requests/view">Help Deliver</a></li>
-            <li role="presentation"><a href="/voiddeck/requests/create">Your Requests</a></li>
+            <li role="presentation"><a href="/voiddeck/requests/create">Your Requests </a></li>
             <!-- <li role="presentation"><a href="/voiddeck/requests/accepted">Requests Accepted</a></li> -->
             <!-- <li role="presentation"><a href="/profile">Profile</a></li> -->
             <!-- <li role="presentation"><a href="/logout">Sign out</a></li> -->
             <!-- <ul class="menu"> -->
-              <li class="haha" role="presentation">
-                <a href="...">User Name ▼</a>
-                <ul class="submenu">
-                  <li><a href="...">Requests Made</a></li>
-                  <li><a href="...">Requests Accepted</a></li>
-                  <li><a href="...">Logout</a></li>
-                </ul>
-              </li>
+            <!-- <li class="dropdown" role="presentation">
+              <a href="...">User Name ▼</a>
+              <ul class="submenu">
+                <li role="presentation"><a href="...">Requests Made</a></li>
+                <li role="presentation"><a href="...">Requests Accepted</a></li>
+                <li role="presentation"><a href="...">Logout</a></li>
+              </ul>
+            </li> -->
+
           </ul>
           <% }; %>
           <% if (!currentUser) { %>
@@ -69,7 +84,7 @@
         <h5>Hi <%= currentUser.name %></h5>
       <% }; %> -->
 
-      <div class="row marketing">
+      <!-- <div class="row marketing"> -->
 
 
 
@@ -85,5 +100,12 @@
 
     </div>
 
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous">
+    </script>
+    <script src="/js/main.js"></script>
+    <script src="/js/bootstrap.js"></script>
 </body>
 </html>

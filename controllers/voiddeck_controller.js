@@ -14,18 +14,19 @@ var millisecondConverter = function(date,hour,min) {
 
 let voiddeckController = {
 
-  index: (req,res) => {
-    res.render('voiddeck/index')
-  },
+  // index: (req,res) => {
+  //   res.render('voiddeck/index')
+  // },
 
   listRequests: (req,res) => {
-
+    sessionStorage.setItem('mySelectValue', 0);
     Request.find({
       helper: { $eq: null }
     }, (err, requests) => {
       if (err) throw err
       else {
-        res.render('voiddeck/requests', { requests: requests, currentUser: req.user })
+        // sessionStorage.setItem('mySelectValue', 0);
+        res.render('voiddeck/requests', { requests: requests, currentUser: req.user, currentTab: "allRequests" });
       }
     })
   },
@@ -35,7 +36,7 @@ let voiddeckController = {
       req.flash('error', 'You are already in a party! Leave/delete your party before creating a new one');
       res.redirect('/voiddeck');
     }
-    res.render('voiddeck/createRequest')
+    res.render('voiddeck/createRequest', { currentTab: "createRequest" });
   },
 
   createRequest: (req,res) => {
