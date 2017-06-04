@@ -1,6 +1,6 @@
-<div class="container">
+<div>
 
-  <h2 class="page-header">Your requests:</h2>
+  <h2>Your requests:</h2>
 
   <ul class="list-group">
 
@@ -16,10 +16,10 @@
         <form method="GET" action="/voiddeck/requests/<%= request._id %>/edit">
           <button type="submit">Edit Request</button>
         </form>
-        click <a href="/voiddeck/requests/<%= request._id %>/edit">me</a> to edit request
-        or here to delete.
-        <form action="/voiddeck/help/<%= request._id %>?_method=PUT" method="POST">
-          <button type="submit" class="btn btn-danger">Help Deliver!</button>
+        <!-- click <a href="/voiddeck/requests/<%= request._id %>/edit">me</a> to edit request
+        or here to delete. -->
+        <form action="/voiddeck/requests/<%= request._id %>?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-danger">Delete Request</button>
         </form>
       <% } %>
       <% if (request.helper) { %>

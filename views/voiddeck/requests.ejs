@@ -1,31 +1,37 @@
-<div class="container">
+<div>
 
-  <h2 class="page-header">Current unfulfilled requests:</h2>
+  <h2 class="test">Current unfulfilled requests:</h2>
 
-  <ul class="list-group">
+  <div class="list-group">
 
     <% requests.forEach(function(request) { %>
-    <li class="list-group-item">
+    <div class="list-group-item request-container">
 
-      Help me buy: <strong><%= request.food %></strong><br>
-      Destination: <strong><%= request.destination %></strong><br>
-      I can collect from <strong><%= request.collectionFrom %></strong> to
-                         <strong><%= request.collectionTo %></strong><br>
-
-      <% if (request.author.equals(currentUser._id)) { %>
-        click <a href="/voiddeck/requests/<%= request._id %>/edit">me</a> to edit request
-      <% } %>
-      <% if (!request.author.equals(currentUser._id) && (!request.helper)) { %>
-        <form action="/voiddeck/help/<%= request._id %>?_method=PUT" method="POST">
-          <button type="submit" class="btn btn-danger">Help Deliver!</button>
-        </form>
-      <% } %>
-    </li>
+      <div class="request-container-left">
+        Help me buy: <strong><%= request.food %></strong><br>
+        Destination: <strong><%= request.destination %></strong><br>
+        Collection time from <strong><%= request.collectionFrom %></strong> to
+                           <strong><%= request.collectionTo %></strong><br>
+      </div>
+      <div class="request-container-right">
+        <% if (request.author.equals(currentUser._id)) { %>
+          <!-- click <a href="/voiddeck/requests/<%= request._id %>/edit">me</a> to edit request -->
+          <form method="get" action="/voiddeck/requests/<%= request._id %>/edit">
+            <button type="submit" class="btn">Edit Request</button>
+          </form>
+        <% } %>
+        <% if (!request.author.equals(currentUser._id) && (!request.helper)) { %>
+          <form action="/voiddeck/help/<%= request._id %>?_method=PUT" method="POST">
+            <button type="submit" class="btn btn-danger">Help Deliver!</button>
+          </form>
+        <% } %>
+      </div>
+    </div>
 
 
     <% })%>
 
-  </ul>
+  </div>
 
 
 

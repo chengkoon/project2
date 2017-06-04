@@ -5,51 +5,60 @@
 
 
 
-<div class="container">
-  <form action="/voiddeck/requests/create" method="POST">
-
-    <div class="modal-body row">
-      <div class="form-group col-md-6">
-        <label for="food">Help me buy:</label><br>
-        <textarea name="food" rows="4" placeholder="Please state item, quantity, and shop's name. (e.g. 1 X Curry puff from Old Chang Kee)"></textarea>
-      </div>
-      <!-- <div class="form-group col-md-4">
-        <label for="destination">Deliver to:</label>
-        <input type="text" class="form-control" id="destination" placeholder="Cinnamon College lift lobby" name="destination">
-      </div> -->
-      <div class="form-group col-md-6">
-        <label for="destination">Deliver to:</label>
-        <select name="destination">
-          <option value="cinnamon">Cinnamon College Lift Lobby</option>
-          <option value="capt">CAPT Lift Lobby</option>
-          <option value="tembusu">Tembusu College Lift Lobby</option>
-          <option value="nus-yale">NUS Yale Lift Lobby</option>
-        </select>
-      </div>
-
-    </div>
-
-    My available collection day and time:
-
-    <div class="modal-body row">
-      <div class="form-group col-md-4">
-        <label for="from">From:</label>
-        <select class="from" name="collectionFrom"></select>
-      </div>
-      <div class="form-group col-md-4">
-        <label for="to">To:</label>
-        <select class="to" name="collectionTo"></select>
-      </div>
-      <div class="form-group col-md-4">
-        <label for="rewards">Rewards:</label>
-        <select class="rewards" name="rewards">
-          <% for (let i=1; i<=currentUser.tokens; i++) { %>
-            <option value="<%= i %>"><%= i %> x Token(s)</option>
-          <% } %>
-        </select>
-      </div>
-    </div>
-
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
+<div>
+  <table class="table table-hover">
+    <form action="/voiddeck/requests/create" method="POST">
+      <tbody>
+        <tr>
+          <th><label for="food">Help me buy:</label></th>
+          <th><textarea name="food" rows="2" cols="40" placeholder="Please state item, quantity, and shop's name. (e.g. 1 X Curry puff from Old Chang Kee)"></textarea></th>
+        </tr>
+        <tr>
+          <th><label for="destination">Deliver to:</label></th>
+          <th>
+            <select name="destination">
+              <option value="cinnamon">Cinnamon College Lift Lobby</option>
+              <option value="capt">CAPT Lift Lobby</option>
+              <option value="tembusu">Tembusu College Lift Lobby</option>
+              <option value="nus-yale">NUS Yale Lift Lobby</option>
+            </select>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <label for="from">Collection Time From:</label>
+          </th>
+          <th>
+            <select class="from" name="collectionFrom"></select>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <label for="to">To:</label><br>
+          </th>
+          <th>
+            <select class="to" name="collectionTo"></select>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <label for="rewards">Rewards:</label>
+          </th>
+          <th>
+            <select class="rewards" name="rewards">
+              <% for (let i=1; i<=currentUser.tokens; i++) { %>
+                <option value="<%= i %>"><%= i %> x Token(s)</option>
+              <% } %>
+            </select>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </th>
+          <th></th>
+        </tr>
+      </tbody>
+    </form>
+  </table>
 </div>
