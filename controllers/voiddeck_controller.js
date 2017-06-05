@@ -19,7 +19,7 @@ let voiddeckController = {
   // },
 
   listRequests: (req,res) => {
-    sessionStorage.setItem('mySelectValue', 0);
+
     Request.find({
       helper: { $eq: null }
     }, (err, requests) => {
