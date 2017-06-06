@@ -19,9 +19,11 @@ let voiddeckController = {
   // },
 
   listRequests: (req,res) => {
-
+    var date123 = Date.now();
+    console.log("hahahahahah", date123);
     Request.find({
-      helper: { $eq: null }
+      helper: { $eq: null },
+      collectionToUTC: { $gt: date123 }
     }, (err, requests) => {
       if (err) throw err
       else {

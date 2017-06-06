@@ -4,6 +4,9 @@
     //   e.preventDefault()
     //   $(this).tab('show')
     // })
+
+    $('.dropdown-toggle').dropdown();
+
     var pathname = window.location.pathname;
     console.log("pathname is...", pathname);
     if (pathname === "/voiddeck/requests/view") {
@@ -13,6 +16,14 @@
     else if (pathname === "/voiddeck/requests/create") {
       $('.user-menu').find('.active').removeClass('active');
       $('.user-menu li:nth-child(2)').addClass('active');
+    }
+    else if (pathname === "/register") {
+      $('.guest-menu').find('.active').removeClass('active');
+      $('.guest-menu li:nth-child(1)').addClass('active');
+    }
+    else if (pathname === "/login") {
+      $('.guest-menu').find('.active').removeClass('active');
+      $('.guest-menu li:nth-child(2)').addClass('active');
     }
     // $('.user-menu li').on('click', function() {
     //   var activeIndex = $(this).index();
