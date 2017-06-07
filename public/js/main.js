@@ -13,7 +13,7 @@
       $('.user-menu').find('.active').removeClass('active');
       $('.user-menu li:nth-child(1)').addClass('active');
     }
-    else if (pathname === "/voiddeck/requests/create") {
+    else if (pathname === "/voiddeck/requests/create" || pathname === "/voiddeck/requests/user") {
       $('.user-menu').find('.active').removeClass('active');
       $('.user-menu li:nth-child(2)').addClass('active');
     }

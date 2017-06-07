@@ -16,13 +16,14 @@ router.get('/logout', homepageController.logout);
 //lobby - view all posted requests
 router.get('/voiddeck', voiddeckController.listRequests);
 router.get('/voiddeck/requests/view', isLoggedIn, voiddeckController.listRequests);
+router.get('/voiddeck/requests/user', isLoggedIn, voiddeckController.userRequests);
 router.get('/voiddeck/requests/create', isLoggedIn, voiddeckController.createRequestPage);
 router.post('/voiddeck/requests/create', isLoggedIn, voiddeckController.createRequest);
 
 //individual level - requests made and/or accepted
 router.get('/voiddeck/requests/made', isLoggedIn, voiddeckController.listRequestsMade);
 router.get('/voiddeck/requests/accepted', isLoggedIn, voiddeckController.listRequestsAccepted);
-router.get('/voiddeck/requests/:id', isLoggedIn, voiddeckController.editOrJoin);
+// router.get('/voiddeck/requests/:id', isLoggedIn, voiddeckController.editOrJoin);
 // ^from the list screen, user clicks on each request (checks if it's for edit or commit)
 // router.put('/voiddeck/requests/:id', isLoggedIn, voiddeckController.updateOrCommitTest);
 
