@@ -19,7 +19,7 @@
   <title>Tapau App</title>
 </head>
 <body>
-  <div class="container" id="testtest">
+  <div class="container">
 
       <nav class="header clearfix">
         <!-- <nav> -->
@@ -36,7 +36,7 @@
           <ul class="nav nav-tabs pull-right user-menu">
             <!-- <li role="presentation"><a href="/voiddeck/requests/create">I'm hungry!</a></li> -->
             <li role="presentation"><a href="/voiddeck/requests/view">Help Deliver</a></li>
-            <li role="presentation"><a href="/voiddeck/requests/create">Your Requests </a></li>
+            <li role="presentation"><a href="/voiddeck/requests/user">Your Requests </a></li>
             <!-- <li role="presentation"><a href="/voiddeck/requests/accepted">Requests Accepted</a></li> -->
             <!-- <li role="presentation"><a href="/profile">Profile</a></li> -->
             <li role="presentation"><a href="/logout">Sign out</a></li>
@@ -70,12 +70,12 @@
 
       <!-- <div class="row marketing"> -->
 
-
-
+      <div class="body-container">
+          <% include partials/alerts %>
           <%- body %>
           <!-- <%- JSON.stringify(currentUser) %> -->
+      </div>
 
-          <% include partials/alerts %>
 
       <!-- </div> -->
       <footer class="footer">

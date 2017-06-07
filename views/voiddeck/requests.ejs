@@ -8,16 +8,33 @@
     <div class="list-group-item request-container">
 
       <div class="request-container-left">
-        Help me buy: <strong><%= request.food %></strong><br>
-        Destination: <strong><%= request.destination %></strong><br>
-        Collection time from <strong><%= request.collectionFrom %></strong> to
-                           <strong><%= request.collectionTo %></strong><br>
+        <table class="table table-hover">
+          <tbody>
+            <tr>
+              <th>Help me buy:</th>
+              <th><strong><%= request.food %></strong></th>
+            </tr>
+            <tr>
+              <th>Destination:</th>
+              <th><strong><%= request.destination %></strong></th>
+            </tr>
+            <tr>
+              <th>Collection time from</th>
+              <th><strong><%= request.collectionFrom %></strong> to
+                                 <strong><%= request.collectionTo %></strong></th>
+            </tr>
+            <tr>
+              <th>Reward:</th>
+              <th><strong><%= request.tokens %></strong> token(s)</th>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="request-container-right">
         <% if (request.author.equals(currentUser._id)) { %>
           <!-- click <a href="/voiddeck/requests/<%= request._id %>/edit">me</a> to edit request -->
           <form method="get" action="/voiddeck/requests/<%= request._id %>/edit">
-            <button type="submit" class="btn">Edit Request</button>
+            <button type="submit" class="btn btn-primary">Edit Request</button>
           </form>
         <% } %>
         <% if (!request.author.equals(currentUser._id) && (!request.helper)) { %>

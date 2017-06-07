@@ -27,6 +27,10 @@ body {
   background-color: #337ab7;
   color: #fff;
 }*/
+.user-menu {
+  display: block;
+  list-style: none;
+}
 
 .dropdown .submenu>li:hover {
   display: block;
@@ -86,6 +90,13 @@ div.nav.nav-pills.pull-left {
 div.request-container {
   display: flex;
   justify-content: space-between;
+  margin: 0 1em;
+}
+div.request-container-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -100,7 +111,7 @@ div.request-container {
 .header {
   padding-top: 2rem;
   /*padding-bottom: 1rem;*/
-  border-bottom: .05rem solid #e5e5e5;
+  /*border-bottom: .05rem solid #e5e5e5;*/
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
@@ -126,6 +137,10 @@ div.request-container {
 }
 .container-narrow > hr {
   margin: 2rem 0;
+}
+.body-container {
+  background-color: white;
+  /*border: 1px solid #DDDDDD;*/
 }
 
 /* Main marketing message and sign up button */
