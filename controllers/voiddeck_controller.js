@@ -1,6 +1,10 @@
 let Request = require('../models/request')
 let User = require('../models/user')
 var moment = require('moment');
+const express = require('express');
+const app = express();
+const isLoggedIn = require('../middleware/isLoggedIn');
+
 moment().format();
 
 var millisecondConverter = function(date,hour,min) {
@@ -21,8 +25,7 @@ let voiddeckController = {
   // },
 
   listRequests: (req,res) => {
-    // var date123 = Date.now();
-    console.log("hahahahahah", dateNow);
+
     Request.find({
       helper: { $eq: null },
       collectionToUTC: { $gt: dateNow }
@@ -74,23 +77,15 @@ let voiddeckController = {
   },
 
   createRequest: (req,res) => {
-    console.log("HELLO we just posted createRequest");
-    if (req.user.party) { //meaning user is alr in a party
-      req.flash('error', 'You are already in a party! (Leave/delete your party before helping others)');
-      res.redirect('/voiddeck');
-    }
 
-    // let collectionStartUTC = millisecondConverter(req.body.collectionStartDate, req.body.collectionStartHour, req.body.collectionStartMin);
-    // let collectionEndUTC = millisecondConverter(req.body.collectionEndDate, req.body.collectionEndHour, req.body.collectionEndMin);
     let dateNowUTC = Date.now();
-
-    console.log("the req.body is...", req.body);
     var collectionFromUTC = moment(req.body.collectionFrom, 'ddd DD/MM/YYYY h:mm A').valueOf();
     var collectionToUTC = moment(req.body.collectionTo, 'ddd DD/MM/YYYY h:mm A').valueOf();
 
     let newRequest = new Request({
 
       author: req.user._id,
+      authorName: req.user.name,
       food: req.body.food,
       destination: req.body.destination,
       tokens: req.body.rewards,
@@ -104,7 +99,7 @@ let voiddeckController = {
     newRequest.save(function (err, savedEntry) {
       if (err) {
         req.flash('error', 'Please enter a valid time range for collection time.');
-        res.redirect('/voiddeck');
+        res.redirect('/voiddeck/requests/create');
       }
       else {
         User.findOneAndUpdate({
@@ -117,7 +112,7 @@ let voiddeckController = {
         }, (err, thing) => {
           if (err) throw err
           else {
-            res.redirect('/voiddeck')
+            res.redirect('/voiddeck/requests/view');
           }
         })
       }
@@ -170,27 +165,27 @@ let voiddeckController = {
   //   })
   // },
 
-  listRequestsMade: (req,res) => {
-    User.findOne({ _id: req.user._id })
-    .populate('requestsMade')
-    .exec(function(err, user) {
-      if (err) throw err
-      else {
-        res.render('voiddeck/requestsMade', { user: user });
-      }
-    })
-  },
-
-  listRequestsAccepted: (req,res) => {
-    User.findOne({ _id: req.user._id })
-    .populate('requestsAccepted')
-    .exec(function(err, user) {
-      if (err) throw err
-      else {
-        res.render('voiddeck/requestsAccepted', { user: user });
-      }
-    })
-  },
+  // listRequestsMade: (req,res) => {
+  //   User.findOne({ _id: req.user._id })
+  //   .populate('requestsMade')
+  //   .exec(function(err, user) {
+  //     if (err) throw err
+  //     else {
+  //       res.render('voiddeck/requestsMade', { user: user });
+  //     }
+  //   })
+  // },
+  //
+  // listRequestsAccepted: (req,res) => {
+  //   User.findOne({ _id: req.user._id })
+  //   .populate('requestsAccepted')
+  //   .exec(function(err, user) {
+  //     if (err) throw err
+  //     else {
+  //       res.render('voiddeck/requestsAccepted', { user: user });
+  //     }
+  //   })
+  // },
 
   editPage: (req,res) => {
     Request.findById(req.params.id, (err, request) => {
@@ -215,7 +210,6 @@ let voiddeckController = {
       if (err) throw err
 
       else if (thisRequest.helper) {
-        console.log("1111111111")
         req.flash("error", "Failed to edit request as someone has accepted to fulfill your request.");
         res.redirect('/voiddeck/requests/view');
       }
@@ -259,88 +253,17 @@ let voiddeckController = {
             }
           })
         }
-
-        // Request.findOneAndUpdate({
-        //   _id: req.params.id
-        // }, {
-        //
-        //   food: req.body.food,
-        //   destination: req.body.destination,
-        //   tokens: changedRewards,
-        //   requestCreatedUTC: dateNowUTC,
-        //   collectionFrom: req.body.collectionFrom,
-        //   collectionTo: req.body.collectionTo,
-        //   collectionFromUTC: collectionFromUTC,
-        //   collectionToUTC: collectionToUTC
-        //
-        // }, (err, editedRequest) => {
-        //   if (err) {
-        //     req.flash("error", "Unable to edit request, please try again");
-        //     res.redirect("/voiddeck/requests/view");
-        //   }
-        //   else {
-        //     req.flash("success", "Your request has been successfully edited")
-        //     res.redirect('/voiddeck/requests/view');
-        //   }
-        // })
       }
     })
   },
-
-  // joinPage: (req,res) => {
-  //
-  //   Request.findOne({
-  //     _id: req.params.id
-  //   }, (err, requestItem) => {
-  //     if (err) throw err
-  //     else {
-  //       res.render('voiddeck/joinRequest', {requestItem:requestItem});
-  //     }
-  //   })
-  //
-  // },
-
-  // makeJoin: (req,res) => {
-  //   console.log("you are at the right place");
-  //   console.log("req.params is: ", req.params);
-  //   Request.findOneAndUpdate({
-  //     _id: req.params.id
-  //   }, {
-  //
-  //   }, (err, requestItem) => {
-  //     if (err) throw err
-  //     else {
-  //       console.log("successfully entered into makeJoin");
-  //
-  //       req.user.party = requestItem._id;
-  //       req.user.food = req.body.food;
-  //       req.user.save();
-  //
-  //       requestItem.food.push(req.body.food);
-  //       console.log("req.user is ", req.user);
-  //       requestItem.members.push(req.user.name);
-  //       requestItem.author.push(req.user._id);
-  //
-  //       requestItem.save(function(err,savedEntry) {
-  //         if (err) throw err
-  //         else {
-  //           console.log(requestItem);
-  //           res.redirect('/voiddeck/requests/view');
-  //         }
-  //       })
-  //
-  //       // console.log(requestItem);
-  //
-  //     }
-  //   })
-  // },
 
   helpDeliver: (req,res) => {
 
     Request.findOneAndUpdate({
       _id: req.params.id
     }, {
-      helper: req.user._id
+      helper: req.user._id,
+      helperName: req.user.name
     }, (err, requestToBeAccepted) => {
       if (err) throw err
       else {
@@ -353,100 +276,59 @@ let voiddeckController = {
         })
       }
     })
-
-    // Request.findOne({
-    //   _id: req.params.id
-    // }, (err, requestToBeChecked) => {
-    //   if (err) throw err
-    //   // else if ((deliveryStartUTC < requestToBeChecked.collectionStartUTC) || (deliveryEndUTC > requestToBeChecked.collectionEndUTC) ) {
-    //   //   req.flash('error', 'Please enter a valid new time range (has to be within the old collection time range).')
-    //   //   res.redirect('/voiddeck/help/'+req.params.id);
-    //   // }
-    //   else {
-    //     console.log("we are HERE IN THE MAKEHELP FORM");
-    //     req.user.helper = true;
-    //     req.user.save();
-    //     Request.findOneAndUpdate({
-    //       _id: req.params.id
-    //     }, {
-    //       deliveryStartDate: req.body.deliveryStartDate,
-    //       deliveryEndDate: req.body.deliveryEndDate,
-    //       deliveryStartTime: req.body.deliveryStartTime,
-    //       deliveryEndTime: req.body.deliveryEndTime,
-    //       deliveryStartUTC: deliveryStartUTC,
-    //       deliveryEndUTC: deliveryEndUTC
-    //     }, (err, requestToBeHelped) => {
-    //       if (err) throw err
-    //       else {
-    //         requestToBeHelped.helper.push(req.user.name);
-    //         requestToBeHelped.author.push(req.user._id);
-    //         requestToBeHelped.save();
-    //         // res.flash('success','You are now helping deliver food')
-    //         res.redirect('/voiddeck');
-    //       }
-    //     })
-    //   }
-    // })
   },
 
-  confirm: (req,res) => {
-    Request.findOne({
+  deliveryReceived: (req, res) => {
+    Request.findOneAndUpdate({
       _id: req.params.id
-    }, (err, thisRequest) => {
-      if (err) throw err
-
-      else if (thisRequest.numberOfConfirmedDelivery === thisRequest.members.length+1) {
-        // ^ when EVERYONE (helper + members) has confirmed 'delivered' and 'received'
-        console.log("last person has clicked on button");
-        res.redirect('/voiddeck');
-      }
-      else { //individual confirmations
-        req.user.confirmedDelivery = true;
-        req.user.save();
-        thisRequest.numberOfConfirmedDelivery++;
-        thisRequest.save();
-        res.redirect('/voiddeck');
-      }
-    } )
+    }, {
+      deliveryReceipt: true
+    })
+    .exec()
+    .then(function(request) {
+      return User.findOneAndUpdate({
+        _id: req.user._id
+      }, {
+        $pull: { requestsMade: request._id }
+      }).exec();
+    })
+    .then(function(user) {
+      res.redirect('/voiddeck/requests/user');
+    })
   },
 
+  transferTokens: (req,res) => {
+    
+    Request.findOne({ _id: req.params.id })
+    .populate('helper')
+    .exec()
+    .then(function(request) {
+      if (request.author.equals(req.user._id)) { // request creator clicked 'delete' button
+        return User.findOneAndUpdate({
+          _id: req.user._id
+        }, {
+          $inc: { tokens: request.tokens}
+        }).exec();
+      }
+      else if (request.helper.equals(req.user._id)) { // else if instead of else for clarity's sake
+        return User.findOneAndUpdate({
+          _id: request.helper
+        }, {
+          $inc: { tokens: request.tokens }
+        }).exec();
+      }
+    })
+    .then(function(user) {
+      voiddeckController.delete(req, res);
+    })
+  },
   delete: (req,res) => {
-    Request.findOneAndRemove({
-      _id: req.params.id
-    }, (err) => {
+    Request.findOneAndRemove({ _id: req.params.id }, function(err, request) {
       if (err) throw err;
       else {
-        console.log('Request deleted!');
-        res.redirect('/voiddeck/requests/view');
+        res.redirect('/voiddeck/requests/user');
       }
-    })
-  },
-
-  createOfferPage: (req,res) => {
-    res.render('voiddeck/createOffer')
-  },
-
-  createOffer: (req,res) => {
-    var millisecondConverter = function(date,time) {
-      let dateMS = date.split('-');
-      let timeMS = time.split(':');
-      let finalMS = new Date(dateMS[0],dateMS[1]-1,dateMS[2],timeMS[0],timeMS[1]);
-      return finalMS.getTime();
-    }
-
-    let newRequest = new Request({
-      author: req.user,
-      food: req.body.food,
-      foodShop: req.body.foodShop,
-      destination: req.body.destination,
-      latestBy: req.body.latestBy,
-      deliveryStart: millisecondConverter(req.body.deliveryDateStart, req.body.deliveryTimeStart),
-      deliveryEnd: millisecondConverter(req.body.deliveryDateStart, req.body.deliveryTimeStart)
-    })
-    newRequest.save(function (err, savedEntry) {
-      if (err) throw err
-      res.redirect('/voiddeck')
-    })
+    });
   }
-}
+} // end of voiddeck controller object
 module.exports = voiddeckController

@@ -32,6 +32,15 @@ body {
   list-style: none;
 }
 
+.navbar-header {
+  display: flex;
+}
+
+/*.navbar {
+  margin: 0 25px;
+}*/
+
+
 .dropdown .submenu>li:hover {
   display: block;
   border-radius: 4px;
@@ -131,16 +140,22 @@ div.request-container-right {
 @media (min-width: 48em) {
   .container {
     max-width: 80rem;
-    background-color: #efefef;
+    background-color: white;
     border-radius: 18px;
+    padding-top: 30px;
+    padding-bottom: 15px;
+    padding-left: 40px;
+    padding-right: 40px;
   }
 }
 .container-narrow > hr {
   margin: 2rem 0;
 }
 .body-container {
-  background-color: white;
-  /*border: 1px solid #DDDDDD;*/
+  background-color: #F8F8F8;
+  border: 1px solid #E7E7E7;
+  border-radius: 4px;
+  padding: 15px;
 }
 
 /* Main marketing message and sign up button */
@@ -178,4 +193,8 @@ div.request-container-right {
   .jumbotron {
     border-bottom: 0;
   }
+}
+
+.submit-btn {
+  text-align: center;
 }

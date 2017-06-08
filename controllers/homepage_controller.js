@@ -32,7 +32,7 @@ let homepageController = {
         // can add extra conditions here
         // FLASH
         passport.authenticate('local', {
-          successRedirect: '/',
+          successRedirect: '/voiddeck/requests/view',
           successFlash: 'Account created and logged in'
         })(req, res);
       }
@@ -48,7 +48,7 @@ let homepageController = {
       successRedirect: '/voiddeck/requests/view',
       failureRedirect: '/login',
       failureFlash: 'Invalid username and/or password',
-      successFlash: 'You have logged in'
+      successFlash: 'You are logged in'
     }),
 
   logout: (req, res) => {

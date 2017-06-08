@@ -21,25 +21,37 @@
 <body>
   <div class="container">
 
-      <nav class="header clearfix">
+      <nav class="navbar navbar-default">
         <!-- <nav> -->
-          <div class="nav nav-pills pull-left">
-            <div><h3><a href="/voiddeck/requests/view">Tapau</a></h3></div>
+        <div class="container-fluid">
+          <!-- <div class="navbar-header">
+            <li class="navbar-brand" href="/voiddeck/requests/view">Tapau</li>
             <% if (currentUser) { %>
-            <div id="token"><img style="width: 20px;" src="/img/token.png">  X <%= currentUser.tokens %></div>
+            <li id="token"><img style="width: 20px;" src="/img/token.png">  X <%= currentUser.tokens %></li>
             <% } %>
 
-          </div>
+          </div> -->
           <!-- <ul class="nav nav-pills pull-right"> -->
-          <% if (currentUser) { %>
 
-          <ul class="nav nav-tabs pull-right user-menu">
+
+          <div id="navbar" class="nav navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li role="presentation"><a class="navbar-brand">Tapau</a></li>
+              <% if (currentUser) { %>
+              <li><a href="#" data-toggle="tooltip" data-placement="right" title="Help deliver to earn more!">Tokens left <span class="badge"><%= currentUser.tokens %></span></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
             <!-- <li role="presentation"><a href="/voiddeck/requests/create">I'm hungry!</a></li> -->
             <li role="presentation"><a href="/voiddeck/requests/view">Help Deliver</a></li>
             <li role="presentation"><a href="/voiddeck/requests/user">Your Requests </a></li>
             <!-- <li role="presentation"><a href="/voiddeck/requests/accepted">Requests Accepted</a></li> -->
             <!-- <li role="presentation"><a href="/profile">Profile</a></li> -->
-            <li role="presentation"><a href="/logout">Sign out</a></li>
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown">Hi, <%= currentUser.name %><span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/logout">Sign out</a></li>
+              </ul>
+            </li>
             <!-- <ul class="menu"> -->
             <!-- <li class="dropdown" role="presentation">
               <a href="...">User Name ▼</a>
@@ -49,19 +61,21 @@
                 <li role="presentation"><a href="...">Logout</a></li>
               </ul>
             </li> -->
+            </ul>
+            <% } else { %>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li role="presentation"><a href="/register">Register</a></li>
+              <li role="presentation"><a href="/login">Log in</a></li>
+            </ul>
+            <% }; %>
+          </div>
 
 
-          </ul>
-          <% }; %>
-          <% if (!currentUser) { %>
-          <ul class="nav nav-tabs pull-right guest-menu">
-            <li role="presentation"><a href="/register">Register</a></li>
-            <li role="presentation"><a href="/login">Log in</a></li>
-          </ul>
-          <% }; %>
           <!-- </ul> -->
         <!-- </nav> -->
         <!-- <h3 class="text-muted"><a href="/voiddeck/requests/view">Tapau</a></h3> -->
+        </div>
       </nav>
 
       <!-- <% if (currentUser) { %>
