@@ -5,26 +5,39 @@
     //   $(this).tab('show')
     // })
 
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip({container: 'body'})
+    });
+
+    $(function () {
+      $('[data-toggle="popover"]').popover({container: 'body'})
+    });
+
     $('.dropdown-toggle').dropdown();
 
     var pathname = window.location.pathname;
     console.log("pathname is...", pathname);
     if (pathname === "/voiddeck/requests/view") {
-      $('.user-menu').find('.active').removeClass('active');
-      $('.user-menu li:nth-child(1)').addClass('active');
+      $('.navbar-right').find('.active').removeClass('active');
+      $('.navbar-right').find('.active').removeClass('active');
+      $('.navbar-right li:nth-child(1)').addClass('active');
+      $('.navbar-right li:nth-child(1)').addClass('active');
     }
     else if (pathname === "/voiddeck/requests/create" || pathname === "/voiddeck/requests/user") {
-      $('.user-menu').find('.active').removeClass('active');
-      $('.user-menu li:nth-child(2)').addClass('active');
+      $('.navbar-right').find('.active').removeClass('active');
+      $('.navbar-right').find('.active').removeClass('active');
+      $('.navbar-right li:nth-child(2)').addClass('active');
+      $('.navbar-right li:nth-child(2)').addClass('active');
     }
     else if (pathname === "/register") {
-      $('.guest-menu').find('.active').removeClass('active');
-      $('.guest-menu li:nth-child(1)').addClass('active');
+      $('.navbar-right').find('.active').removeClass('active');
+      $('.navbar-right li:nth-child(1)').addClass('active');
     }
     else if (pathname === "/login") {
-      $('.guest-menu').find('.active').removeClass('active');
-      $('.guest-menu li:nth-child(2)').addClass('active');
+      $('.navbar-right').find('.active').removeClass('active');
+      $('.navbar-right li:nth-child(2)').addClass('active');
     }
+    // $('.user-menu li').on('click', function() {
     // $('.user-menu li').on('click', function() {
     //   var activeIndex = $(this).index();
     //   sessionStorage.setItem('mySelectValue', activeIndex);

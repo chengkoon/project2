@@ -2,6 +2,9 @@
 
   <h2 class="test">Current unfulfilled requests:</h2>
 
+  <% if (requests.length === 0) { %>
+    There is no request for food delivery. <a href="/voiddeck/requests/create">Be the first one!</a>
+  <% } %>
   <div class="list-group">
 
     <% requests.forEach(function(request) { %>
@@ -11,20 +14,22 @@
         <table class="table table-hover">
           <tbody>
             <tr>
-              <th>Help me buy:</th>
+              <td>Help <strong><%= request.authorName %></strong> buy:</td>
               <th><strong><%= request.food %></strong></th>
             </tr>
             <tr>
-              <th>Destination:</th>
+              <td>Destination:</td>
               <th><strong><%= request.destination %></strong></th>
             </tr>
             <tr>
-              <th>Collection time from</th>
-              <th><strong><%= request.collectionFrom %></strong> to
-                                 <strong><%= request.collectionTo %></strong></th>
+              <td>Collection time</td>
+              <th>
+                <strong><%= request.collectionFrom %></strong> to
+                <strong><%= request.collectionTo %></strong>
+              </th>
             </tr>
             <tr>
-              <th>Reward:</th>
+              <td>Reward:</td>
               <th><strong><%= request.tokens %></strong> token(s)</th>
             </tr>
           </tbody>
@@ -32,21 +37,46 @@
       </div>
       <div class="request-container-right">
         <% if (request.author.equals(currentUser._id)) { %>
-          <!-- click <a href="/voiddeck/requests/<%= request._id %>/edit">me</a> to edit request -->
-          <form method="get" action="/voiddeck/requests/<%= request._id %>/edit">
-            <button type="submit" class="btn btn-primary">Edit Request</button>
-          </form>
-        <% } %>
-        <% if (!request.author.equals(currentUser._id) && (!request.helper)) { %>
-          <form action="/voiddeck/help/<%= request._id %>?_method=PUT" method="POST">
-            <button type="submit" class="btn btn-danger">Help Deliver!</button>
-          </form>
+          <div class="btn-group-md btn-group-vertical">
+            <form method="get" action="/voiddeck/requests/<%= request._id %>/edit">
+              <button type="submit" class="btn btn-primary btn-block">Edit Request</button>
+            </form><br>
+            <form action="/voiddeck/requests/claimReward/<%= request._id %>?_method=PUT" method="POST">
+              <button type="submit" class="btn btn-danger btn-block">Delete Request</button>
+            </form>
+          </div>
+        <% } else { %>
+
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Help Deliver!</button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delivery</h4>
+                  </div>
+                  <div class="modal-body">
+                    By clicking on the button below, you have agreed to deliver<br>
+                    <strong><%= request.food %></strong> to <strong><%= request.authorName %></strong> at
+                    <strong><%= request.destination %></strong> between <strong><%= request.collectionFrom %></strong> and <strong><%= request.collectionTo %></strong>.
+                  </div>
+                  <div class="modal-footer">
+                    <form action="/voiddeck/help/<%= request._id %>?_method=PUT" method="POST">
+                      <button type="submit" class="btn btn-danger">Help Deliver!</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
         <% } %>
       </div>
     </div>
 
 
-    <% })%>
+    <% }) %>
 
   </div>
 
