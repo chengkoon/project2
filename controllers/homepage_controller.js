@@ -1,8 +1,8 @@
-let User = require('../models/user');
-let passport = require('../config/ppConfig');
-let Request = require('../models/request')
+const User = require('../models/user');
+const passport = require('../config/ppConfig');
+const Request = require('../models/request')
 
-let homepageController = {
+const homepageController = {
 
   index: (req,res) => {
     res.render('homepage/index');

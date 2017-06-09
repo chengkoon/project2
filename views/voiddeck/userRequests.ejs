@@ -1,66 +1,19 @@
 
-  <h2>You are delivering:</h2>
+<h2>You are delivering:</h2>
 
-  <% if (result.activeAcceptedRequests.length === 0) { %>
-    You do not have any delivery requests to fulfill, click <a href="/voiddeck/requests/view">here</a> to see who's hungry!
-  <% } else { %>
-    <div class="list-group">
-        <% result.activeAcceptedRequests.forEach(function(request) { %>
-        <div class="list-group-item request-container">
+<% if (result.activeAcceptedRequests.length === 0) { %>
+  You do not have any delivery requests to fulfill, click <a href="/voiddeck/requests/view">here</a> to see who's hungry!
+<% } else { %>
+  <div class="list-group">
+      <% result.activeAcceptedRequests.forEach(function(request) { %>
+      <div class="list-group-item row request-container">
 
-          <div class="request-container-left">
-            <table class="table table-hover">
-              <tbody>
-                <tr>
-                  <td>Help <strong><%= request.authorName %></strong> buy:</td>
-                  <th><strong><%= request.food %></strong></th>
-                </tr>
-                <tr>
-                  <td>Destination:</td>
-                  <th><strong><%= request.destination %></strong></th>
-                </tr>
-                <tr>
-                  <td>Collection time</td>
-                  <th><strong><%= request.collectionFrom %></strong> to
-                                     <strong><%= request.collectionTo %></strong></th>
-                </tr>
-                <tr>
-                  <td>Reward:</td>
-                  <th><strong><%= request.tokens %></strong> token(s)</th>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="request-container-right">
-            <% if (!request.deliveryReceipt) { %>
-              <button type="button" class="btn btn-success disabled" data-toggle="popover" data-trigger="hover" data-content="The receipient needs to confirm delivery receipt first!">Claim reward</button>
-            <% } else { %>
-              <form action="/voiddeck/requests/claimReward/<%= request._id %>?_method=PUT" method="POST">
-                <button type="submit" class="btn btn-success">Claim reward!</button>
-              </form>
-            <% } %>
-          </div>
-        </div>
-        <% }) %>
-    </div>
-  <% } %>
-
-  <h2>Your food request(s):</h2>
-
-  <% if (result.activeRequestsMade.length === 0) { %>
-    You do not have any active delivery requests, click <a href="/voiddeck/requests/create">here</a> to make one!
-  <% } else { %>
-    <div class="list-group">
-      If you want to create more food requests (that hungry?), click <a href="/voiddeck/requests/create">here</a>.
-      <% result.activeRequestsMade.forEach(function(request) { %>
-      <div class="list-group-item request-container">
-
-        <div class="request-container-left">
+        <div class="request-left">
           <table class="table table-hover">
             <tbody>
-              <tr>
-                <td>Food detail:</td>
-                <th><strong><%= request.food %></strong></th>
+              <tr class="remove-border-top">
+                <td class="remove-border-top">Help <strong><%= request.authorName %></strong> buy:</td>
+                <th class="remove-border-top"><strong><%= request.food %></strong></th>
               </tr>
               <tr>
                 <td>Destination:</td>
@@ -68,88 +21,134 @@
               </tr>
               <tr>
                 <td>Collection time</td>
-                <th>
-                  <strong><%= request.collectionFrom %></strong> to
-                  <strong><%= request.collectionTo %></strong>
-                </th>
+                <th><strong><%= request.collectionFrom %></strong> to
+                                   <strong><%= request.collectionTo %></strong></th>
               </tr>
               <tr>
                 <td>Reward:</td>
                 <th><strong><%= request.tokens %></strong> token(s)</th>
               </tr>
-              <% if (request.helper) { %>
-              <tr>
-                <td>Helper:</td>
-                <th><strong><%= request.helperName %></strong> is helping in this delivery</th>
-              </tr>
-              <% } %>
             </tbody>
           </table>
         </div>
-        <div class="request-container-right">
-          <% if (!request.helper) { %>
+        <div class="request-right">
           <div class="btn-group-md btn-group-vertical">
-            <form method="GET" action="/voiddeck/requests/<%= request._id %>/edit">
-              <button type="submit" class="btn btn-primary btn-block">Edit Request</button>
-            </form><br>
+          <% if (!request.deliveryReceipt) { %>
+            <button type="button" class="btn btn-success disabled" data-toggle="popover" data-trigger="hover" data-content="The receipient needs to confirm delivery receipt first!">Claim reward</button>
+          <% } else { %>
             <form action="/voiddeck/requests/claimReward/<%= request._id %>?_method=PUT" method="POST">
-              <button type="submit" class="btn btn-danger btn-block">Delete Request</button>
+              <button type="submit" class="btn btn-success">Claim reward!</button>
             </form>
-          </div>
           <% } %>
-          <% if (request.helper) { %>
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Delivery Received</button>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+  </div>
+<% } %>
 
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Confirm Receipt of Delivery</h4>
-                  </div>
-                  <div class="modal-body">
-                    By clicking on the button below, you would have confirmed the receipt of food delivery and the transfer of <strong><%= request.tokens %> token(s)</strong> to <strong><%= request.helperName %></strong> will be completed.
-                  </div>
-                  <div class="modal-footer">
-                    <form action="/voiddeck/requests/received/<%= request._id %>?_method=PUT" method="POST">
-                      <button type="submit" class="btn btn-danger">Delivery Received</button>
-                    </form>
-                  </div>
+<h2>Your food request(s):</h2>
+
+<% if (result.activeRequestsMade.length === 0) { %>
+  You do not have any active delivery requests, click <a href="/voiddeck/requests/create">here</a> to make one!
+<% } else { %>
+  <div class="list-group">
+    If you want to create more food requests (that hungry?), click <a href="/voiddeck/requests/create">here</a>.
+    <% result.activeRequestsMade.forEach(function(request) { %>
+    <div class="list-group-item row request-container">
+
+      <div class="request-left">
+        <table class="table table-hover">
+          <tbody>
+            <tr class="remove-border-top">
+              <td class="remove-border-top">Food detail:</td>
+              <th class="remove-border-top"><strong><%= request.food %></strong></th>
+            </tr>
+            <tr>
+              <td>Destination:</td>
+              <th><strong><%= request.destination %></strong></th>
+            </tr>
+            <tr>
+              <td>Collection time</td>
+              <th>
+                <strong><%= request.collectionFrom %></strong> to
+                <strong><%= request.collectionTo %></strong>
+              </th>
+            </tr>
+            <tr>
+              <td>Reward:</td>
+              <th><strong><%= request.tokens %></strong> token(s)</th>
+            </tr>
+            <% if (request.helper) { %>
+            <tr>
+              <td>Helper:</td>
+              <th><strong><%= request.helperName %></strong> is helping in this delivery</th>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <div class="request-right">
+        <% if (!request.helper) { %>
+        <div class="btn-group-md btn-group-vertical">
+          <form method="GET" action="/voiddeck/requests/<%= request._id %>/edit">
+            <button type="submit" class="btn btn-primary btn-block">Edit Request</button>
+          </form><br>
+          <form action="/voiddeck/requests/claimReward/<%= request._id %>?_method=PUT" method="POST">
+            <button type="submit" class="btn btn-danger btn-block">Delete Request</button>
+          </form>
+        </div>
+        <% } %>
+        <% if (request.helper) { %>
+        <div class="btn-group-md btn-group-vertical">
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Delivery Received</button>
+        </div>
+          <!-- Modal -->
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">Confirm Receipt of Delivery</h4>
+                </div>
+                <div class="modal-body">
+                  By clicking on the button below, you would have confirmed the receipt of food delivery and the transfer of <strong><%= request.tokens %> token(s)</strong> to <strong><%= request.helperName %></strong> will be completed.
+                </div>
+                <div class="modal-footer">
+                  <form action="/voiddeck/requests/received/<%= request._id %>?_method=PUT" method="POST">
+                    <button type="submit" class="btn btn-danger">Delivery Received</button>
+                  </form>
                 </div>
               </div>
             </div>
-          <% } %>
-        </div>
-      </div> <!-- /div.request-container -->
-      <% }) %>
-    </div> <!-- /div.list-group -->
-  <% } %>
-
-  <% if (result.expiredRequestsMade.length > 0) { %>
-  <h2>Your expired food request(s):</h2>
-
-    <div class="list-group">
-        <% result.expiredRequestsMade.forEach(function(request) { %>
-        <div class="list-group-item request-container">
-
-          <div class="request-container-left">
-            Help me buy: <strong><%= request.food %></strong><br>
-            Destination: <strong><%= request.destination %></strong><br>
-            Collection time from <strong><%= request.collectionFrom %></strong> to
-                               <strong><%= request.collectionTo %></strong><br>
-            Reward: <strong><%= request.tokens %> token(s)</strong>
           </div>
-          <div class="request-container-right">
+        <% } %>
+      </div>
+    </div> <!-- /div.request-container -->
+    <% }) %>
+  </div> <!-- /div.list-group -->
+<% } %>
 
-              <!-- click <a href="/voiddeck/requests/<%= request._id %>/edit">me</a> to edit request
-              or here to delete. -->
-              <form action="/voiddeck/requests/claimReward/<%= request._id %>?_method=PUT" method="POST">
-                <button type="submit" class="btn btn-danger">Delete and Retrieve Tokens</button>
-              </form>
-
-          </div>
-        </div>
-        <% }) %>
+<% if (result.expiredRequestsMade.length > 0) { %>
+<h2>Your expired food request(s):</h2>
+<div class="list-group">
+  <% result.expiredRequestsMade.forEach(function(request) { %>
+  <div class="list-group-item row request-container">
+    <div class="request-left">
+      Help me buy: <strong><%= request.food %></strong><br>
+      Destination: <strong><%= request.destination %></strong><br>
+      Collection time from <strong><%= request.collectionFrom %></strong> to
+                         <strong><%= request.collectionTo %></strong><br>
+      Reward: <strong><%= request.tokens %> token(s)</strong>
     </div>
-  <% } %>
+    <div class="request-right">
+      <div class="btn-group-md btn-group-vertical">
+        <form action="/voiddeck/requests/claimReward/<%= request._id %>?_method=PUT" method="POST">
+          <button type="submit" class="btn btn-danger">Delete and Retrieve Tokens</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>
+<% } %>
