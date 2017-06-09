@@ -1,21 +1,22 @@
 <div>
 
-  <h2 class="test">Current unfulfilled requests:</h2>
+  <h2>Current unfulfilled requests:</h2>
 
   <% if (requests.length === 0) { %>
     There is no request for food delivery. <a href="/voiddeck/requests/create">Be the first one!</a>
   <% } %>
+
   <div class="list-group">
 
     <% requests.forEach(function(request) { %>
-    <div class="list-group-item request-container">
+    <div class="list-group-item row request-container">
 
-      <div class="request-container-left">
+      <div class="request-left">
         <table class="table table-hover">
           <tbody>
-            <tr>
-              <td>Help <strong><%= request.authorName %></strong> buy:</td>
-              <th><strong><%= request.food %></strong></th>
+            <tr class="remove-border-top">
+              <td class="remove-border-top">Help <strong><%= request.authorName %></strong> buy:</td>
+              <th class="remove-border-top"><strong><%= request.food %></strong></th>
             </tr>
             <tr>
               <td>Destination:</td>
@@ -35,7 +36,7 @@
           </tbody>
         </table>
       </div>
-      <div class="request-container-right">
+      <div class="request-right">
         <% if (request.author.equals(currentUser._id)) { %>
           <div class="btn-group-md btn-group-vertical">
             <form method="get" action="/voiddeck/requests/<%= request._id %>/edit">
