@@ -1,8 +1,4 @@
-
 <h3>Make a delivery request!</h3>
-
-<br>
-
 
 <form action="/voiddeck/requests/create" method="POST">
   <div>
@@ -33,7 +29,7 @@
         </tr>
         <tr>
           <td>
-            <label for="to">To:</label><br>
+            <label for="to">To:</label>
           </td>
           <th>
             <select class="to" name="collectionTo"></select>
@@ -51,10 +47,11 @@
             </select>
           </th>
         </tr>
+        <tr><td><th></th></td></tr>
       </tbody>
     </table>
   </div>
   <div class="submit-btn">
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
   </div>
 </form>

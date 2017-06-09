@@ -16,7 +16,12 @@ table>tbody>tr>th.remove-border-top {
   border-top-color: white;
 }
 
+table.table {
+  margin-bottom: 0;
+}
+
 .request-right {
+  margin-left: 15px;
   text-align: center;
 }
 

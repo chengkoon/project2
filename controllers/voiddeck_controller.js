@@ -1,13 +1,13 @@
-let Request = require('../models/request')
-let User = require('../models/user')
-var moment = require('moment');
+const Request = require('../models/request')
+const User = require('../models/user')
+const moment = require('moment');
 const express = require('express');
 const app = express();
 const isLoggedIn = require('../middleware/isLoggedIn');
 
 moment().format();
 
-var millisecondConverter = function(date,hour,min) {
+const millisecondConverter = function(date,hour,min) {
   let dateMS = date.split('-');
   // let timeMS = time.split(':');
   hour = parseInt(hour);
@@ -16,13 +16,9 @@ var millisecondConverter = function(date,hour,min) {
   return finalMS.getTime();
 }
 
-var dateNow = Date.now();
+const dateNow = Date.now();
 
-let voiddeckController = {
-
-  // index: (req,res) => {
-  //   res.render('voiddeck/index')
-  // },
+const voiddeckController = {
 
   listRequests: (req,res) => {
 
@@ -39,8 +35,6 @@ let voiddeckController = {
   },
 
   userRequests: (req,res) => {
-    // var promise = User.findOne({ _id: req.user._id }).populate('requestsAccepted')
-    // .populate('requestsMade').exec();
     User.findOne({ _id: req.user._id })
     .populate('requestsAccepted')
     .populate('requestsMade')
@@ -118,74 +112,6 @@ let voiddeckController = {
       }
     })
   },
-
-  // editOrJoin: (req,res) => {
-  //   Request.find({_id: req.params.id})
-  //   .populate('author')
-  //   .exec(function(err, authorInfo) {
-  //     if (err) throw err
-  //
-  //     else if (req.user.helper) { //low-hanging fruit, if user is alr a helper,
-  //       //he shldn't even be allowed to click on editOrJoin
-  //       req.flash('error', 'You are already helping another party!');
-  //       res.redirect('/voiddeck')
-  //     }
-  //
-  //     else if (authorInfo[0].author.length) {
-  //
-  //       for (var i=0; i<authorInfo[0].author.length; ++i) {
-  //         //if while looping thru the for loop, there's a match then...
-  //         if (authorInfo[0].author[i]._id.equals(req.user._id)) {
-  //           // console.log("if loop is entered, editing request details and i is now ", i);
-  //           // console.log("authorInfo[0].author[i]._id is ",authorInfo[0].author[i]._id);
-  //           // console.log("req.user._id is ", req.user._id);
-  //
-  //           res.redirect('/voiddeck/requests/'+authorInfo[0]._id+'/edit');
-  //           return ;
-  //           // res.redirect('/voiddeck')
-  //         }
-  //         // console.log("i is now ", i);
-  //       }
-  //       //out of the for loop,
-  //       if (!req.user.party) {
-  //         // console.log("else loop is entered, joining food party");
-  //         // console.log("request id is ",authorInfo[0]._id);
-  //         res.redirect('/voiddeck/requests/'+authorInfo[0]._id+'/join');
-  //       }
-  //       else if (req.user.party) {
-  //         req.flash('error', 'You are already in another party! (Leave/delete your party first)');
-  //         res.redirect('/voiddeck')
-  //       }
-  //
-  //     }
-  //     // else {
-  //     //   console.log("PARTY IS FULL");
-  //     //   res.redirect('/voiddeck');
-  //     // }
-  //   })
-  // },
-
-  // listRequestsMade: (req,res) => {
-  //   User.findOne({ _id: req.user._id })
-  //   .populate('requestsMade')
-  //   .exec(function(err, user) {
-  //     if (err) throw err
-  //     else {
-  //       res.render('voiddeck/requestsMade', { user: user });
-  //     }
-  //   })
-  // },
-  //
-  // listRequestsAccepted: (req,res) => {
-  //   User.findOne({ _id: req.user._id })
-  //   .populate('requestsAccepted')
-  //   .exec(function(err, user) {
-  //     if (err) throw err
-  //     else {
-  //       res.render('voiddeck/requestsAccepted', { user: user });
-  //     }
-  //   })
-  // },
 
   editPage: (req,res) => {
     Request.findById(req.params.id, (err, request) => {
@@ -298,7 +224,7 @@ let voiddeckController = {
   },
 
   transferTokens: (req,res) => {
-    
+
     Request.findOne({ _id: req.params.id })
     .populate('helper')
     .exec()
