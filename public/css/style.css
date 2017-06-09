@@ -1,4 +1,4 @@
-/* Space out content a bit */
+
 body {
   background: url(../img/second-HDB.jpeg) no-repeat center center fixed;
   -webkit-background-size: cover;
@@ -10,189 +10,81 @@ body {
   position: relative;
 }
 
-.dropdown {
-  position: relative;
-  float: left;
+table>tbody>tr.remove-border-top,
+table>tbody>tr>td.remove-border-top,
+table>tbody>tr>th.remove-border-top {
+  border-top-color: white;
 }
 
-.submenu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  padding: inherit;
+.request-right {
+  text-align: center;
 }
 
-/*ul.user-menu>li>a:hover {
-  background-color: #337ab7;
-  color: #fff;
-}*/
-.user-menu {
-  display: block;
-  list-style: none;
+/* Custom, iPhone Retina */
+@media only screen and (min-width : 320px){
+  .request-container {
+    display: block;
+    /*margin: 0 10px;*/
+  }
+  .btn-group-md {
+    display: flex;
+    justify-content: center;
+  }
+  .btn-group-md>button {
+    margin: 0 5px;
+  }
 }
 
-.navbar-header {
-  display: flex;
+/* Extra Small Devices, Phones */
+@media only screen and (min-width : 480px){
+  .request-container {
+    margin: 0 10px;
+  }
 }
 
-/*.navbar {
-  margin: 0 25px;
-}*/
-
-
-.dropdown .submenu>li:hover {
-  display: block;
-  border-radius: 4px;
-  color: #fff;
-  background-color: #337ab7;
-}
-
-.dropdown .submenu>li>a:hover {
-  color: inherit;
-  text-decoration-color: rgb(255,255,255);
-  text-decoration-line: none;
-  text-decoration-style: solid;
-}
-
-li.dropdown:hover>.submenu {
-  display: block;
-}
-
-.submenu li {
-  list-style-type: none;
-  padding: 10px 15px;
-  background-color: none;
-}
-
-.header {
-  z-index: 100;
-  position: relative;
-}
-
-.row {
-  z-index: 50;
-}
-
-/*#token {
-  padding-left:10px;
-  height: 30px;
-  font-size: 8px;
-  height: 30px;
-}
-#token-img {
-
-  height: 30px;
-  margin: auto;
-}*/
-
-div.nav.nav-pills.pull-left {
-  display: flex;
-  width: 150px;
-  justify-content: space-between;
-}
-
-#token {
-  margin: auto;
-}
-
-div.request-container {
-  display: flex;
-  justify-content: space-between;
-  margin: 0 1em;
-}
-div.request-container-right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px){
+  .request-container {
+    display: flex;
+    margin: 0 10px;
+  }
+  .request-left {
+    flex-grow: 1;
+  }
+  .request-right {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .btn-group-md {
+    display: block;
+  }
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
-.header,
-.marketing,
 .footer {
   padding-right: 1rem;
   padding-left: 1rem;
-}
-
-/* Custom page header */
-.header {
-  padding-top: 2rem;
-  /*padding-bottom: 1rem;*/
-  /*border-bottom: .05rem solid #e5e5e5;*/
-}
-/* Make the masthead heading the same height as the navigation */
-.header h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 3rem;
-}
-
-/* Custom page footer */
-.footer {
   padding-top: 1.5rem;
   color: #777;
   border-top: .05rem solid #e5e5e5;
 }
 
-/* Customize container */
-@media (min-width: 48em) {
-  .container {
-    max-width: 80rem;
-    background-color: white;
-    border-radius: 18px;
-    padding-top: 30px;
-    padding-bottom: 15px;
-    padding-left: 40px;
-    padding-right: 40px;
-  }
+.container {
+  max-width: 80rem;
+  background-color: white;
+  border-radius: 18px;
+  padding-top: 30px;
+  padding-bottom: 15px;
+  padding-left: 40px;
+  padding-right: 40px;
 }
-.container-narrow > hr {
-  margin: 2rem 0;
-}
+
 .body-container {
   background-color: #F8F8F8;
   border: 1px solid #E7E7E7;
   border-radius: 4px;
   padding: 15px;
-}
-
-/* Main marketing message and sign up button */
-.jumbotron {
-  text-align: center;
-  border-bottom: .05rem solid #e5e5e5;
-}
-.jumbotron .btn {
-  padding: .75rem 1.5rem;
-  font-size: 1.5rem;
-}
-
-/* Supporting marketing content */
-.marketing {
-  margin: 1rem 0;
-}
-.marketing p + h4 {
-  /*margin-top: 1.5rem;*/
-}
-
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 48em) {
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-right: 0;
-    padding-left: 0;
-  }
-  /* Space out the masthead */
-  .header {
-    /*margin-bottom: 2rem;*/
-  }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
-  }
 }
 
 .submit-btn {

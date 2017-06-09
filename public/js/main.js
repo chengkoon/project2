@@ -1,20 +1,13 @@
 
   $(document).ready(function(){
-    // $('#myTabs a').click(function (e) {
-    //   e.preventDefault()
-    //   $(this).tab('show')
-    // })
 
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip({container: 'body'})
-    });
-
-    $(function () {
-      $('[data-toggle="popover"]').popover({container: 'body'})
-    });
-
+    /* Bootstrap plugins */
+    $('[data-toggle="tooltip"]').tooltip({container: 'body'})
+    $('.collapse').collapse();
+    $('[data-toggle="popover"]').popover({container: 'body'})
     $('.dropdown-toggle').dropdown();
 
+    /* to add active class for tabs in navbar */
     var pathname = window.location.pathname;
     console.log("pathname is...", pathname);
     if (pathname === "/voiddeck/requests/view") {
@@ -37,28 +30,6 @@
       $('.navbar-right').find('.active').removeClass('active');
       $('.navbar-right li:nth-child(2)').addClass('active');
     }
-    // $('.user-menu li').on('click', function() {
-    // $('.user-menu li').on('click', function() {
-    //   var activeIndex = $(this).index();
-    //   sessionStorage.setItem('mySelectValue', activeIndex);
-    // })
-    // // $(".user-menu li:nth-child(2)").addClass('active');
-    // var activeIndex = parseInt(sessionStorage.getItem('mySelectValue')) + 1;
-    // if (activeIndex) {
-    //     // $('.pull-right li:nth-child('+activeIndex+')').addClass('active');
-    //     $('.user-menu').find('.active').removeClass('active');
-    //     $('.user-menu li:nth-child('+activeIndex+')').addClass('active');
-    // }
-    // else {
-    //   $('.user-menu li:nth-child(1)').addClass('active');
-    // }
-    // } else {
-    //     $('.pull-right:nth-child('+activeIndex+')').addClass('active');
-    // }
-
-
-
-
 
     // function intervals(startString) {
         var startString = Date();
