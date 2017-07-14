@@ -1,5 +1,4 @@
-# users-todo-list
-# project2
+# Project 2 - Tapau (Community Takeaway App)
 
 ## Demo
 1. Either git clone this repo or visit https://wdi-project2-ck.herokuapp.com/ for a live demo
